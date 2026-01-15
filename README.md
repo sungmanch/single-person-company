@@ -19,13 +19,13 @@ SPC (Single Person Company) AI Team is a Claude Code plugin that gives solo foun
 **One-liner (Recommended)**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/sungmancho/spc-ai-team/main/install-remote.sh | bash
+curl -fsSL https://raw.githubusercontent.com/sungmanch/single-person-company/main/install-remote.sh | bash
 ```
 
 **Or clone and install**
 
 ```bash
-git clone https://github.com/sungmancho/spc-ai-team.git
+git clone https://github.com/sungmanch/single-person-company.git
 cd spc-ai-team
 ./install.sh
 ```

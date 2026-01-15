@@ -15,7 +15,7 @@ echo -e "${GREEN}╚════════════════════
 echo ""
 
 # Configuration
-REPO="sungmancho/spc-ai-team"
+REPO="sungmanch/single-person-company"
 BRANCH="main"
 TMP_DIR=$(mktemp -d)
 DOWNLOAD_URL="https://github.com/$REPO/archive/refs/heads/$BRANCH.tar.gz"
