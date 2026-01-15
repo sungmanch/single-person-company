@@ -122,6 +122,56 @@ else
 fi
 
 # ============================================================
+# REGISTER IN INSTALLED_PLUGINS.JSON
+# ============================================================
+INSTALLED_PLUGINS_FILE="$CLAUDE_DIR/plugins/installed_plugins.json"
+CURRENT_DATE=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
+
+echo -e "${BLUE}Registering in installed_plugins.json...${NC}"
+
+if [ ! -f "$INSTALLED_PLUGINS_FILE" ]; then
+    # Create new installed_plugins.json
+    cat > "$INSTALLED_PLUGINS_FILE" << EOF
+{
+  "version": 2,
+  "plugins": {
+    "spc-ai-team@local": [
+      {
+        "scope": "user",
+        "installPath": "$PLUGIN_DIR",
+        "version": "1.0.0",
+        "installedAt": "$CURRENT_DATE",
+        "lastUpdated": "$CURRENT_DATE"
+      }
+    ]
+  }
+}
+EOF
+    echo "  Created installed_plugins.json"
+elif command -v jq &> /dev/null; then
+    # Use jq to add/update plugin entry
+    TMP_FILE=$(mktemp)
+    jq --arg path "$PLUGIN_DIR" --arg date "$CURRENT_DATE" '
+      .plugins["spc-ai-team@local"] = [{
+        "scope": "user",
+        "installPath": $path,
+        "version": "1.0.0",
+        "installedAt": $date,
+        "lastUpdated": $date
+      }]
+    ' "$INSTALLED_PLUGINS_FILE" > "$TMP_FILE"
+    mv "$TMP_FILE" "$INSTALLED_PLUGINS_FILE"
+    echo "  Registered plugin"
+else
+    # Fallback without jq - check if already registered
+    if grep -q '"spc-ai-team@local"' "$INSTALLED_PLUGINS_FILE"; then
+        echo "  Plugin already in installed_plugins.json"
+    else
+        echo -e "${YELLOW}  Warning: jq not found. Please install jq or manually add plugin to installed_plugins.json${NC}"
+    fi
+fi
+
+# ============================================================
 # COMPLETION MESSAGE
 # ============================================================
 echo ""
