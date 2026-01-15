@@ -55,10 +55,39 @@ claude
 
 ### Full Team Workflow
 
-Let PM analyze and orchestrate the team:
+When you run `/spc "your request"`, here's what happens:
+
+1. **Meet Alex 🧑‍💼 (PM):** The Product Manager will interview you about your request
+2. **Clarification:** Answer 2-4 questions to help Alex understand your needs
+3. **PRD Creation:** Alex creates a comprehensive Product Requirements Document
+4. **Team Activation:** Alex orchestrates the team:
+   - 🏗️ Architect designs technical architecture
+   - 🎨 Designer creates UI/UX specs
+   - 💻 Developer implements the feature
+   - 🧪 QA tests everything
+   - 📝 Writer documents the result
+5. **Delivery:** Your complete feature is delivered with tests and docs
+
+All artifacts are saved in `.spc/` directory for your review.
+
+#### Example Session
 
 ```
-/spc "Build a todo list with CRUD operations"
+You: /spc "Build a todo list with CRUD operations"
+
+Alex (PM): Hi! I'm Alex 🧑‍💼, your PM. I see you want to build a todo list.
+           Before I create the PRD, let me ask a few questions...
+
+[Interactive questions appear with options to select]
+
+You: [Answer questions]
+
+Alex: Perfect! Creating PRD and kicking off the team...
+      [Creates PRD, spawns Architect & Designer in parallel]
+      [Developer implements after specs ready]
+      [QA tests, Writer documents]
+
+Alex: ✅ Todo list complete! All tests passing, docs updated.
 ```
 
 ### Individual Agents
