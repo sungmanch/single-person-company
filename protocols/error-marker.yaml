@@ -1,0 +1,15 @@
+# Error Marker Template
+# Location: .spc/markers/{agent}-{task}-error.yaml
+
+timestamp: "{ISO-8601-timestamp}"
+agent: "{agent-name}"
+task: "{task-name}"
+status: error
+error_type: "{blocked|failed|timeout}"
+message: "{description of what went wrong}"
+missing_dependencies:
+  - "{dependency 1}"
+  - "{dependency 2}"
+recovery_action: "{suggested fix}"
+blocker_details: |
+  {detailed explanation of the blocker}

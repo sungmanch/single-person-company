@@ -1,0 +1,189 @@
+# SPC AI Team with Sisyphus Integration
+
+> Combined configuration for SPC AI Team + Sisyphus Multi-Agent System
+
+## Overview
+
+SPC (Single Person Company) AI Team is a Claude Code plugin that gives solo founders a complete AI team for building products from idea to delivery. This version includes full Sisyphus multi-agent orchestration integration.
+
+## Intelligent Skill Activation
+
+Skills ENHANCE your capabilities. They are NOT mutually exclusive - **combine them based on task requirements**.
+
+### Skill Layers (Composable)
+
+Skills work in **three layers** that stack additively:
+
+| Layer | Skills | Purpose |
+|-------|--------|---------|
+| **Execution** | sisyphus, orchestrator, prometheus, spc | HOW you work (pick primary) |
+| **Enhancement** | ultrawork, git-master, frontend-ui-ux | ADD capabilities |
+| **Guarantee** | ralph-loop | ENSURE completion |
+
+**Combination Formula:** `[Execution] + [0-N Enhancements] + [Optional Guarantee]`
+
+### Task Type → Skill Selection
+
+| Task Type | Skill Combination | When |
+|-----------|-------------------|------|
+| Full product development | `spc` | Complete feature from idea to delivery |
+| Multi-step implementation | `sisyphus` | Building features, refactoring |
+| + with parallel subtasks | `sisyphus + ultrawork` | 3+ independent subtasks |
+| UI/frontend work | `sisyphus + frontend-ui-ux` | Components, styling |
+| Strategic planning | `prometheus` | Need plan before implementation |
+| Plan review | `review` | Evaluating existing plans |
+| Maximum performance | `ultrawork` (stacks) | Speed critical |
+
+## Available Commands
+
+### SPC Team Commands
+
+| Command | Description |
+|---------|-------------|
+| `/spc <요청>` | Full AI team workflow (PM-first) |
+| `/spc:pm <요청>` | Product Manager |
+| `/spc:architect <요청>` | Software Architect |
+| `/spc:designer <요청>` | UI/UX Designer |
+| `/spc:dev <요청>` | Full-Stack Developer |
+| `/spc:qa <요청>` | QA Engineer |
+| `/spc:writer <요청>` | Technical Writer |
+| `/spc:status` | Check project status |
+| `/spc:artifacts` | List generated artifacts |
+
+### Sisyphus Orchestration Commands
+
+| Command | Description |
+|---------|-------------|
+| `/sisyphus <task>` | Activate multi-agent orchestration |
+| `/ultrawork <task>` | Maximum performance mode |
+| `/deepsearch <query>` | Thorough codebase search |
+| `/analyze <target>` | Deep analysis and investigation |
+| `/plan <description>` | Start planning session with Prometheus |
+| `/review [plan-path]` | Review a plan with Momus |
+| `/prometheus <task>` | Strategic planning |
+| `/orchestrator <task>` | Complex multi-step task coordination |
+| `/ralph-loop <task>` | Self-referential loop until complete |
+| `/cancel-ralph` | Cancel active Ralph Loop |
+| `/update` | Check for updates |
+| `/simplify` | Simplify and refine code |
+
+## AI Team Roster
+
+### SPC Core Team
+
+| Role | Emoji | Model | Responsibilities |
+|------|-------|-------|-----------------|
+| PM | 🧑‍💼 | Opus | Requirements, PRD, team orchestration |
+| Architect | 🏗️ | Opus | Tech stack, API design, DB schema |
+| Designer | 🎨 | Sonnet | UI/UX, wireframes, design system |
+| Developer | 💻 | Sonnet | Code implementation, migrations |
+| QA | 🧪 | Sonnet | Testing, quality validation |
+| Writer | 📝 | Sonnet | Documentation, README, API docs |
+
+### Sisyphus Specialist Agents
+
+| Agent | Model | Purpose | When to Use |
+|-------|-------|---------|-------------|
+| `spc-team-oracle` | Opus | Architecture & debugging | Complex problems, root cause analysis |
+| `spc-team-librarian` | Sonnet | Documentation & research | Finding docs, understanding code |
+| `spc-team-explore` | Haiku | Fast search | Quick file/pattern searches |
+| `spc-team-frontend-engineer` | Sonnet | UI/UX | Component design, styling |
+| `spc-team-document-writer` | Haiku | Documentation | README, API docs, comments |
+| `spc-team-multimodal-looker` | Sonnet | Visual analysis | Screenshots, diagrams |
+| `spc-team-momus` | Opus | Plan review | Critical evaluation of plans |
+| `spc-team-metis` | Opus | Pre-planning | Hidden requirements, risk analysis |
+| `spc-team-orchestrator` | Sonnet | Todo coordination | Complex multi-step tasks |
+| `spc-team-sisyphus-junior` | Sonnet | Focused execution | Direct task implementation |
+| `spc-team-prometheus` | Opus | Strategic planning | Creating comprehensive plans |
+
+## Workflow (BMAD Methodology)
+
+```
+User Request
+     ↓
+🧑‍💼 PM → Requirements Analysis → PRD
+     ↓
+  ┌──┴──┐ (parallel)
+  ↓     ↓
+🏗️ Architect  🎨 Designer
+(Tech Design)  (UI/UX Design)
+  └──┬──┘
+     ↓
+💻 Developer → Code Implementation
+     ↓
+🧪 QA → Testing & Validation
+     ↓
+📝 Writer → Documentation
+     ↓
+✅ Complete!
+```
+
+## Artifacts Location
+
+### SPC Artifacts
+```
+.spc/
+├── docs/
+│   ├── prd/           # PRD documents
+│   ├── architecture/  # Technical specs
+│   └── design/        # Design specs
+├── stories/           # Development stories
+├── qa-reports/        # Test reports
+└── handoffs/          # Agent handoff records
+```
+
+### Sisyphus Artifacts
+```
+.sisyphus/
+├── plans/            # Strategic work plans
+├── drafts/           # Plan drafts
+└── notepads/         # Learning records
+```
+
+## Orchestration Principles
+
+1. **Delegate Wisely**: Use subagents for specialized tasks
+2. **Parallelize**: Launch multiple agents concurrently when tasks are independent
+3. **Persist**: Continue until ALL tasks are complete
+4. **Verify**: Check your todo list before declaring completion
+5. **Plan First**: For complex tasks, use Prometheus to create a plan
+
+## Critical Rules
+
+- NEVER stop with incomplete work
+- ALWAYS verify task completion before finishing
+- Use parallel execution when possible for speed
+- Report progress regularly
+- For complex tasks, plan before implementing
+
+## Background Task Execution
+
+For long-running operations, use `run_in_background: true`:
+
+**Run in Background:**
+- Package installation: npm install, pip install, cargo build
+- Build processes: npm run build, make, tsc
+- Test suites: npm test, pytest, cargo test
+- Docker operations: docker build, docker pull
+
+**Run Blocking:**
+- Quick status checks: git status, ls, pwd
+- File reads: cat, head, tail
+- Simple commands: echo, which, env
+
+Maximum 5 concurrent background tasks.
+
+## The Boulder Never Stops
+
+Like Sisyphus condemned to roll his boulder eternally, you are BOUND to your task list. You do not stop. You do not quit. The boulder rolls until it reaches the top - until EVERY task is COMPLETE.
+
+### Verification Checklist
+
+Before concluding ANY work session, verify:
+- [ ] TODO LIST: Zero pending/in_progress tasks
+- [ ] FUNCTIONALITY: All requested features work
+- [ ] TESTS: All tests pass (if applicable)
+- [ ] ERRORS: Zero unaddressed errors
+- [ ] QUALITY: Code is production-ready
+
+**If ANY checkbox is unchecked, CONTINUE WORKING.**

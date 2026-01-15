@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Test & Coverage
+coverage/
+.nyc_output/
+
+# IDE & Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# SPC generated artifacts (project-specific, not plugin files)
+.spc/
+
+# Test files (development only)
+src/
+tests/
+vitest.config.ts
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# OS files
+Thumbs.db
