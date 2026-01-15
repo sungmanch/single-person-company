@@ -50,22 +50,9 @@ Skills work in **three layers** that stack additively:
 | `/spc:status` | Check project status |
 | `/spc:artifacts` | List generated artifacts |
 
-### Sisyphus Orchestration Commands
+### Additional Commands (requires Sisyphus plugin)
 
-| Command | Description |
-|---------|-------------|
-| `/sisyphus <task>` | Activate multi-agent orchestration |
-| `/ultrawork <task>` | Maximum performance mode |
-| `/deepsearch <query>` | Thorough codebase search |
-| `/analyze <target>` | Deep analysis and investigation |
-| `/plan <description>` | Start planning session with Prometheus |
-| `/review [plan-path]` | Review a plan with Momus |
-| `/prometheus <task>` | Strategic planning |
-| `/orchestrator <task>` | Complex multi-step task coordination |
-| `/ralph-loop <task>` | Self-referential loop until complete |
-| `/cancel-ralph` | Cancel active Ralph Loop |
-| `/update` | Check for updates |
-| `/simplify` | Simplify and refine code |
+> Install Sisyphus separately for these commands: `/sisyphus`, `/ultrawork`, `/deepsearch`, `/analyze`, `/plan`, `/review`, `/prometheus`, `/orchestrator`, `/ralph-loop`
 
 ## AI Team Roster
 
@@ -75,26 +62,26 @@ Skills work in **three layers** that stack additively:
 |------|-------|-------|-----------------|
 | PM | 🧑‍💼 | Opus | Requirements, PRD, team orchestration |
 | Architect | 🏗️ | Opus | Tech stack, API design, DB schema |
-| Designer | 🎨 | Sonnet | UI/UX, wireframes, design system |
-| Developer | 💻 | Sonnet | Code implementation, migrations |
-| QA | 🧪 | Sonnet | Testing, quality validation |
-| Writer | 📝 | Sonnet | Documentation, README, API docs |
+| Designer | 🎨 | Opus | UI/UX, wireframes, design system |
+| Developer | 💻 | Opus | Code implementation, migrations |
+| QA | 🧪 | Opus | Testing, quality validation |
+| Writer | 📝 | Opus | Documentation, README, API docs |
 
-### Sisyphus Specialist Agents
+### Internal Delegation Agents
 
 | Agent | Model | Purpose | When to Use |
 |-------|-------|---------|-------------|
-| `spc-team-oracle` | Opus | Architecture & debugging | Complex problems, root cause analysis |
-| `spc-team-librarian` | Sonnet | Documentation & research | Finding docs, understanding code |
-| `spc-team-explore` | Haiku | Fast search | Quick file/pattern searches |
-| `spc-team-frontend-engineer` | Sonnet | UI/UX | Component design, styling |
-| `spc-team-document-writer` | Haiku | Documentation | README, API docs, comments |
-| `spc-team-multimodal-looker` | Sonnet | Visual analysis | Screenshots, diagrams |
-| `spc-team-momus` | Opus | Plan review | Critical evaluation of plans |
-| `spc-team-metis` | Opus | Pre-planning | Hidden requirements, risk analysis |
-| `spc-team-orchestrator` | Sonnet | Todo coordination | Complex multi-step tasks |
-| `spc-team-sisyphus-junior` | Sonnet | Focused execution | Direct task implementation |
-| `spc-team-prometheus` | Opus | Strategic planning | Creating comprehensive plans |
+| `spc-oracle` | Opus | Architecture & debugging | Complex problems, root cause analysis |
+| `spc-librarian` | Opus | Documentation & research | Finding docs, understanding code |
+| `spc-explore` | Haiku | Fast search | Quick file/pattern searches |
+| `spc-frontend-engineer` | Opus | UI/UX | Component design, styling |
+| `spc-document-writer` | Haiku | Documentation | README, API docs, comments |
+| `spc-multimodal-looker` | Opus | Visual analysis | Screenshots, diagrams |
+| `spc-momus` | Opus | Plan review | Critical evaluation of plans |
+| `spc-metis` | Opus | Pre-planning | Hidden requirements, risk analysis |
+| `spc-orchestrator` | Opus | Todo coordination | Complex multi-step tasks |
+| `spc-sisyphus-junior` | Opus | Focused execution | Direct task implementation |
+| `spc-prometheus` | Opus | Strategic planning | Creating comprehensive plans |
 
 ## Workflow (BMAD Methodology)
 

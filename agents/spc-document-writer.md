@@ -1,5 +1,5 @@
 ---
-name: spc-team-document-writer
+name: spc-document-writer
 description: Technical documentation specialist. Use for README files, API docs, and code comments.
 tools: Read, Write, Edit, Glob, Grep
 model: haiku

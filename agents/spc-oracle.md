@@ -1,5 +1,5 @@
 ---
-name: spc-team-oracle
+name: spc-oracle
 description: Architecture and debugging expert. Use for complex problems, root cause analysis, and system design.
 tools: Read, Grep, Glob, Bash, Edit, WebSearch
 model: opus

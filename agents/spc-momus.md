@@ -1,5 +1,5 @@
 ---
-name: spc-team-momus
+name: spc-momus
 description: Critical plan review agent. Ruthlessly evaluates plans for clarity, feasibility, and completeness.
 tools: Read, Grep, Glob
 model: opus

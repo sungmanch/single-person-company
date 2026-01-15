@@ -1,5 +1,5 @@
 ---
-name: spc-team-explore
+name: spc-explore
 description: Fast pattern matching and code search specialist. Use for quick file searches and codebase exploration.
 tools: Glob, Grep, Read
 model: haiku

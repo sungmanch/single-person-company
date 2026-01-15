@@ -1,9 +1,7 @@
-#!/bin/sh
-# SPC AI Team - Remote Installer
-# Usage: curl -fsSL https://raw.githubusercontent.com/sungmancho/spc-ai-team/main/install-remote.sh | sh
+#!/bin/bash
 set -e
 
-# Colors (POSIX compatible)
+# Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -11,175 +9,58 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 
+echo -e "${GREEN}╔════════════════════════════════════════════════════════╗${NC}"
+echo -e "${GREEN}║       SPC AI Team - Remote Installer                   ║${NC}"
+echo -e "${GREEN}╚════════════════════════════════════════════════════════╝${NC}"
+echo ""
+
 # Configuration
-REPO_OWNER="sungmancho"
-REPO_NAME="spc-ai-team"
+REPO="sungmancho/spc-ai-team"
 BRANCH="main"
-BASE_URL="https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}"
-
-# Paths
-CLAUDE_DIR="$HOME/.claude"
-COMMANDS_DIR="$CLAUDE_DIR/commands"
-AGENTS_DIR="$CLAUDE_DIR/agents"
 TMP_DIR=$(mktemp -d)
+DOWNLOAD_URL="https://github.com/$REPO/archive/refs/heads/$BRANCH.tar.gz"
 
-# Cleanup on exit
+# Cleanup function
 cleanup() {
     rm -rf "$TMP_DIR"
 }
 trap cleanup EXIT
 
-printf "${GREEN}╔════════════════════════════════════════════════════════╗${NC}\n"
-printf "${GREEN}║          SPC AI Team Remote Installer                  ║${NC}\n"
-printf "${GREEN}╚════════════════════════════════════════════════════════╝${NC}\n"
-printf "\n"
+# Check dependencies
+check_dependency() {
+    if ! command -v "$1" &> /dev/null; then
+        echo -e "${RED}Error: $1 is required but not installed.${NC}"
+        exit 1
+    fi
+}
 
-# Check for curl or wget
-if command -v curl >/dev/null 2>&1; then
-    DOWNLOAD="curl -fsSL"
-elif command -v wget >/dev/null 2>&1; then
-    DOWNLOAD="wget -qO-"
-else
-    printf "${RED}Error: curl or wget is required${NC}\n"
+echo -e "${BLUE}Checking dependencies...${NC}"
+check_dependency "curl"
+check_dependency "tar"
+
+# Download
+echo -e "${BLUE}Downloading SPC AI Team...${NC}"
+curl -fsSL "$DOWNLOAD_URL" -o "$TMP_DIR/spc-ai-team.tar.gz"
+
+# Extract
+echo -e "${BLUE}Extracting...${NC}"
+tar -xzf "$TMP_DIR/spc-ai-team.tar.gz" -C "$TMP_DIR"
+
+# Find extracted directory (handles branch name in folder)
+EXTRACTED_DIR=$(find "$TMP_DIR" -maxdepth 1 -type d -name "spc-ai-team*" | head -1)
+
+if [ -z "$EXTRACTED_DIR" ]; then
+    echo -e "${RED}Error: Failed to extract archive${NC}"
     exit 1
 fi
 
-# Create directories
-mkdir -p "$COMMANDS_DIR"
-mkdir -p "$AGENTS_DIR"
+# Run installer
+echo -e "${BLUE}Running installer...${NC}"
+echo ""
+cd "$EXTRACTED_DIR"
+chmod +x install.sh
+./install.sh
 
-# File lists
-COMMANDS="analyze cancel-ralph deepsearch orchestrator plan prometheus ralph-loop review simplify sisyphus-default sisyphus spc-architect spc-artifacts spc-designer spc-dev spc-pm spc-qa spc-status spc-writer spc update ultrawork"
-
-AGENTS="spc-architect spc-designer spc-developer spc-pm spc-qa spc-team-document-writer spc-team-explore spc-team-frontend-engineer spc-team-librarian spc-team-metis spc-team-momus spc-team-multimodal-looker spc-team-oracle spc-team-orchestrator spc-team-prometheus spc-team-sisyphus-junior spc-writer"
-
-# ============================================================
-# SMART DETECTION: Check if Sisyphus is already installed
-# ============================================================
-SISYPHUS_EXISTS=false
-for indicator in "$AGENTS_DIR/oracle.md" "$AGENTS_DIR/prometheus.md" "$COMMANDS_DIR/sisyphus.md"; do
-    if [ -f "$indicator" ]; then
-        SISYPHUS_EXISTS=true
-        break
-    fi
-done
-
-if [ "$SISYPHUS_EXISTS" = true ]; then
-    printf "${CYAN}┌────────────────────────────────────────────────────────┐${NC}\n"
-    printf "${CYAN}│  Existing Sisyphus installation detected!              │${NC}\n"
-    printf "${CYAN}│  Installing SPC components only (Add-on mode)          │${NC}\n"
-    printf "${CYAN}└────────────────────────────────────────────────────────┘${NC}\n"
-    printf "\n"
-    INSTALL_MODE="addon"
-else
-    printf "${CYAN}┌────────────────────────────────────────────────────────┐${NC}\n"
-    printf "${CYAN}│  No Sisyphus found - Installing full package           │${NC}\n"
-    printf "${CYAN}│  (SPC + Sisyphus components)                           │${NC}\n"
-    printf "${CYAN}└────────────────────────────────────────────────────────┘${NC}\n"
-    printf "\n"
-    INSTALL_MODE="full"
-fi
-
-# ============================================================
-# DOWNLOAD AND INSTALL
-# ============================================================
-download_file() {
-    url="$1"
-    dest="$2"
-    if ! $DOWNLOAD "$url" > "$dest" 2>/dev/null; then
-        return 1
-    fi
-    return 0
-}
-
-printf "${BLUE}Downloading and installing...${NC}\n"
-
-# Download commands
-cmd_count=0
-cmd_failed=0
-if [ "$INSTALL_MODE" = "full" ]; then
-    for cmd in $COMMANDS; do
-        if download_file "${BASE_URL}/commands/${cmd}.md" "$COMMANDS_DIR/${cmd}.md"; then
-            cmd_count=$((cmd_count + 1))
-        else
-            cmd_failed=$((cmd_failed + 1))
-        fi
-    done
-else
-    # Add-on mode: SPC commands only
-    for cmd in spc spc-architect spc-artifacts spc-designer spc-dev spc-pm spc-qa spc-status spc-writer; do
-        if download_file "${BASE_URL}/commands/${cmd}.md" "$COMMANDS_DIR/${cmd}.md"; then
-            cmd_count=$((cmd_count + 1))
-        else
-            cmd_failed=$((cmd_failed + 1))
-        fi
-    done
-fi
-printf "  Commands: ${GREEN}${cmd_count}${NC} installed"
-[ "$cmd_failed" -gt 0 ] && printf ", ${YELLOW}${cmd_failed} skipped${NC}"
-printf "\n"
-
-# Download agents
-agent_count=0
-agent_failed=0
-if [ "$INSTALL_MODE" = "full" ]; then
-    for agent in $AGENTS; do
-        if download_file "${BASE_URL}/agents/${agent}.md" "$AGENTS_DIR/${agent}.md"; then
-            agent_count=$((agent_count + 1))
-        else
-            agent_failed=$((agent_failed + 1))
-        fi
-    done
-else
-    # Add-on mode: SPC core agents only
-    for agent in spc-pm spc-architect spc-designer spc-developer spc-qa spc-writer; do
-        if download_file "${BASE_URL}/agents/${agent}.md" "$AGENTS_DIR/${agent}.md"; then
-            agent_count=$((agent_count + 1))
-        else
-            agent_failed=$((agent_failed + 1))
-        fi
-    done
-fi
-printf "  Agents: ${GREEN}${agent_count}${NC} installed"
-[ "$agent_failed" -gt 0 ] && printf ", ${YELLOW}${agent_failed} skipped${NC}"
-printf "\n"
-
-# Download spc-claude.md
-if download_file "${BASE_URL}/spc-claude.md" "$CLAUDE_DIR/spc-claude.md"; then
-    printf "  Config: ${GREEN}spc-claude.md${NC} installed\n"
-fi
-
-# Download protocols
-PROTOCOLS_DIR="$CLAUDE_DIR/plugins/spc/protocols"
-mkdir -p "$PROTOCOLS_DIR"
-protocol_count=0
-for protocol in pm-protocol architect-protocol designer-protocol qa-protocol; do
-    if download_file "${BASE_URL}/protocols/${protocol}.md" "$PROTOCOLS_DIR/${protocol}.md"; then
-        protocol_count=$((protocol_count + 1))
-    fi
-done
-printf "  Protocols: ${GREEN}${protocol_count}${NC} installed\n"
-
-# ============================================================
-# COMPLETE
-# ============================================================
-printf "\n"
-printf "${GREEN}╔════════════════════════════════════════════════════════╗${NC}\n"
-if [ "$INSTALL_MODE" = "full" ]; then
-    printf "${GREEN}║  SPC AI Team (Full) installed successfully!            ║${NC}\n"
-else
-    printf "${GREEN}║  SPC AI Team (Add-on) installed successfully!          ║${NC}\n"
-fi
-printf "${GREEN}╚════════════════════════════════════════════════════════╝${NC}\n"
-printf "\n"
-printf "${GREEN}Quick Start:${NC}\n"
-printf "  /spc \"your request\"        - Full AI team workflow\n"
-printf "  /spc:pm \"analyze this\"     - Invoke PM directly\n"
-printf "  /spc:status                - Check project status\n"
-if [ "$INSTALL_MODE" = "full" ]; then
-    printf "  /sisyphus \"your task\"      - Multi-agent orchestration\n"
-    printf "  /ultrawork \"your task\"     - Maximum performance mode\n"
-fi
-printf "\n"
-printf "${CYAN}Note:${NC} Restart Claude Code for changes to take effect.\n"
-printf "\n"
+echo ""
+echo -e "${GREEN}Installation complete!${NC}"
+echo -e "${CYAN}Start a new Claude Code session to use the plugin.${NC}"

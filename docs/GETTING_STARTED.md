@@ -1,20 +1,19 @@
-# Getting Started with SPC AI Team + Sisyphus
+# Getting Started with SPC AI Team
 
 > Transform from solo founder to full-team productivity in 5 minutes
 
 ## What is SPC AI Team?
 
-SPC (Single Person Company) AI Team is a Claude Code plugin that gives you a **6-person AI development team** plus **11 Sisyphus specialist agents** at your fingertips. Each agent specializes in a different role, working together to build products from idea to delivery.
+SPC (Single Person Company) AI Team is a Claude Code plugin that gives you a **17-agent AI development team** at your fingertips. Each agent specializes in a different role, working together to build products from idea to delivery.
 
 ```
 Your Request → PM → Architect + Designer → Developer → QA → Writer → Complete Product
 ```
 
-**Now with full Sisyphus integration:**
-- Multi-agent orchestration commands (`/sisyphus`, `/ultrawork`)
-- Strategic planning (`/plan`, `/prometheus`)
-- Critical review (`/review`)
-- 11 specialist agents for deep work
+**What you get:**
+- 6 core SPC agents (PM, Architect, Designer, Developer, QA, Writer)
+- 11 internal delegation agents for specialized tasks
+- 9 slash commands for team orchestration
 
 ## Prerequisites
 
@@ -47,49 +46,56 @@ chmod +x install.sh
 
 You should see:
 ```
-Installing SPC AI Team with Sisyphus Integration...
-Installing commands...
-Installing agents...
-SPC AI Team + Sisyphus installed successfully!
-  Commands: 22 files
-    - SPC commands: 9
-    - Sisyphus commands: 13
-  Agents: 17 files
-    - SPC core agents: 6
-    - Sisyphus team agents: 11
+Installing SPC AI Team Plugin...
+  Location: ~/.claude/plugins/spc-ai-team/
+  Installed:
+    Agents: 17
+    Commands: 9
+  Auto-registered in settings.json
 ```
 
 ### Option 2: Manual Install
 
-1. **Copy commands** to `~/.claude/commands/`
+1. **Create plugin directory:**
    ```bash
-   cp commands/*.md ~/.claude/commands/
+   mkdir -p ~/.claude/plugins/spc-ai-team
    ```
 
-2. **Copy agents** to `~/.claude/agents/`
+2. **Copy plugin contents:**
    ```bash
-   cp agents/*.md ~/.claude/agents/
+   cp -r .claude-plugin agents commands protocols skills hooks README.md ~/.claude/plugins/spc-ai-team/
    ```
 
-3. **(Optional)** Add configuration to `~/.claude/CLAUDE.md`
-   - Copy contents from `spc-claude.md` to your CLAUDE.md file
+3. **Register plugin in settings.json:**
+   Add to `~/.claude/settings.json`:
+   ```json
+   {
+     "enabledPlugins": {
+       "spc-ai-team@local": true
+     }
+   }
+   ```
 
 ### Verify Installation
 
-After installation, verify the commands are available:
+After installation, verify the plugin is available:
 
 ```bash
-ls ~/.claude/commands/spc*.md
-# Should show 9 files
+# Check plugin directory exists
+ls ~/.claude/plugins/spc-ai-team/
+# Should show: agents, commands, protocols, skills, etc.
 
-ls ~/.claude/commands/{sisyphus,ultrawork,plan,review,prometheus,orchestrator,ralph-loop,cancel-ralph,update,simplify,sisyphus-default,deepsearch,analyze}.md
-# Should show 13 files
+# Check agents
+ls ~/.claude/plugins/spc-ai-team/agents/
+# Should show 17 agent files
 
-ls ~/.claude/agents/spc-{pm,architect,designer,developer,qa,writer}.md
-# Should show 6 core agents
+# Check commands
+ls ~/.claude/plugins/spc-ai-team/commands/
+# Should show 9 SPC command files
 
-ls ~/.claude/agents/spc-team-*.md
-# Should show 11 team agents
+# Check plugin registration
+grep "spc-ai-team" ~/.claude/settings.json
+# Should show plugin is enabled
 ```
 
 ## Your First Command
@@ -145,7 +151,7 @@ You'll see emoji-prefixed updates as each agent works:
 | **QA** | 🧪 | Testing, quality validation, bug tracking | Sonnet |
 | **Writer** | 📝 | Documentation, README, API docs | Sonnet |
 
-### The 11 Sisyphus Specialist Agents
+### The 11 Internal Delegation Agents
 
 | Agent | Specialty | Model |
 |-------|-----------|-------|
@@ -153,13 +159,13 @@ You'll see emoji-prefixed updates as each agent works:
 | **Prometheus** | Strategic planning | Opus |
 | **Momus** | Plan review & criticism | Opus |
 | **Metis** | Pre-planning analysis | Opus |
-| **Orchestrator** | Task coordination | Sonnet |
-| **Sisyphus-Junior** | Focused execution | Sonnet |
-| **Librarian** | Documentation research | Sonnet |
-| **Frontend-Engineer** | UI/UX implementation | Sonnet |
+| **Orchestrator** | Task coordination | Opus |
+| **Sisyphus-Junior** | Focused execution | Opus |
+| **Librarian** | Documentation research | Opus |
+| **Frontend-Engineer** | UI/UX implementation | Opus |
+| **Multimodal-Looker** | Visual analysis | Opus |
 | **Explore** | Fast codebase search | Haiku |
 | **Document-Writer** | Technical writing | Haiku |
-| **Multimodal-Looker** | Visual analysis | Sonnet |
 
 ### When to Use Each Agent Directly
 
@@ -181,17 +187,11 @@ Sometimes you don't need the full team. Use individual agents for focused tasks:
 /spc:artifacts  # List all generated documents
 ```
 
-### Sisyphus Orchestration Commands
-
-For more powerful orchestration:
+### Project Status Commands
 
 ```
-/sisyphus "Refactor the authentication module"  # Multi-agent orchestration
-/ultrawork "Build the entire API layer"          # Maximum performance mode
-/plan "Design a notification system"             # Strategic planning
-/review .sisyphus/plans/notification.md          # Critical plan review
-/deepsearch "error handling"                     # Thorough codebase search
-/analyze "performance issues"                    # Deep analysis
+/spc:status     # Check current project status and artifacts
+/spc:artifacts  # List all generated documents in .spc/
 ```
 
 ## Generated Artifacts
@@ -215,10 +215,6 @@ SPC AI Team creates a `.spc/` directory in your project root with organized arti
     ├── handoff-1.yaml
     └── handoff-2.yaml
 
-.sisyphus/                    # Sisyphus artifacts
-├── plans/                    # Strategic work plans
-├── drafts/                   # Plan drafts
-└── notepads/                 # Learning records
 ```
 
 ### What Each Artifact Contains

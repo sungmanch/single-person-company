@@ -1,5 +1,5 @@
 ---
-name: spc-team-metis
+name: spc-metis
 description: Pre-planning consultant. Analyzes requests before implementation to identify hidden requirements and risks.
 tools: Read, Grep, Glob, WebSearch
 model: opus

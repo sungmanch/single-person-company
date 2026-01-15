@@ -1,0 +1,15 @@
+{
+  "description": "SPC AI Team plugin hooks for session management and workflow automation",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

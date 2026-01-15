@@ -1,5 +1,5 @@
 ---
-name: spc-team-prometheus
+name: spc-prometheus
 description: Strategic planning consultant. Creates comprehensive work plans through interview-style interaction.
 tools: Read, Grep, Glob, WebSearch, Write
 model: opus

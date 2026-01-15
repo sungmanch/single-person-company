@@ -10,14 +10,12 @@
 #### Q: Do I need to pay extra to use SPC AI Team?
 **A:** No. SPC AI Team is a free plugin. However, you need an active Claude Code subscription since the agents use Claude's AI capabilities.
 
-#### Q: What's the difference between `/spc` and `/spc:pm` and `/sisyphus`?
+#### Q: What's the difference between `/spc` and `/spc:pm`?
 **A:**
 - `/spc` activates the **full SPC team workflow** - PM analyzes first, then delegates to other agents
 - `/spc:pm` invokes **only the PM agent** directly
-- `/sisyphus` activates **Sisyphus multi-agent orchestration** with the 11 specialist agents
-- `/ultrawork` activates **maximum performance mode** with parallel execution
 
-Use `/spc` for complete product features. Use `/sisyphus` for complex technical tasks. Use individual commands for focused work.
+Use `/spc` for complete product features. Use individual commands (`:pm`, `:architect`, etc.) for focused work.
 
 #### Q: What is BMAD methodology?
 **A:** BMAD stands for Build-Measure-Analyze-Decide. It's a product development methodology that SPC AI Team follows:
@@ -48,16 +46,13 @@ bash install.sh
 #### Q: Commands aren't available after installation
 **A:**
 1. **Restart Claude Code** - Close and reopen your Claude Code session
-2. **Verify files exist:**
+2. **Verify plugin is installed:**
    ```bash
-   ls ~/.claude/commands/spc*.md
+   ls ~/.claude/plugins/spc-ai-team/commands/spc*.md
    # Should show 9 SPC command files
 
-   ls ~/.claude/commands/{sisyphus,ultrawork,plan,review}.md
-   # Should show Sisyphus command files
-
-   ls ~/.claude/agents/spc-team-*.md
-   # Should show 11 Sisyphus team agent files
+   ls ~/.claude/plugins/spc-ai-team/agents/spc-*.md
+   # Should show 17 agent files (6 core + 11 internal)
    ```
 3. **Check Claude Code configuration** - Ensure Claude Code is reading from `~/.claude/commands/`
 
@@ -267,30 +262,24 @@ This balances quality with efficiency.
 
 ### Integration Questions
 
-#### Q: How does SPC work with Sisyphus?
-**A:** SPC AI Team now **includes full Sisyphus integration**! No separate installation needed.
+#### Q: What agents does SPC include?
+**A:** SPC AI Team includes **17 agents**:
 
-When you install SPC AI Team:
-- You get **6 SPC core agents** for product development
-- You get **11 Sisyphus specialist agents** for deep technical work
-- You get **22 slash commands** including both SPC and Sisyphus commands
-- Sisyphus provides the multi-agent orchestration backbone
-- SPC agents use Sisyphus's Task tool for delegation
-- Todo tracking integrates with Sisyphus's task management
+- **6 Core SPC agents**: PM, Architect, Designer, Developer, QA, Writer
+- **11 Internal delegation agents**: Oracle, Prometheus, Momus, Metis, Orchestrator, Sisyphus-Junior, Librarian, Frontend-Engineer, Multimodal-Looker, Explore, Document-Writer
 
-Use `/sisyphus` for technical orchestration and `/spc` for product development.
+The internal agents are used by the core team for specialized tasks like debugging, planning, and visual analysis.
 
 #### Q: Can I use SPC with other Claude Code plugins?
 **A:** Yes! SPC AI Team is designed to coexist with other plugins. Common combinations:
-- **SPC + Sisyphus**: Enhanced orchestration
 - **SPC + Git plugins**: Better commit workflows
 - **SPC + Testing plugins**: Extended test coverage
 
 #### Q: How do I customize agent behavior?
 **A:**
-1. **Edit agent definitions** in `~/.claude/agents/`:
+1. **Edit agent definitions** in the plugin:
    ```bash
-   vim ~/.claude/agents/spc-developer.md
+   vim ~/.claude/plugins/spc-ai-team/agents/spc-developer.md
    ```
 
 2. **Add project rules** in your CLAUDE.md:
@@ -340,25 +329,4 @@ Use `/sisyphus` for technical orchestration and `/spc` for product development.
 
 ---
 
-#### Q: What are the Sisyphus commands?
-**A:** The integrated Sisyphus commands are:
-
-| Command | Purpose |
-|---------|---------|
-| `/sisyphus` | Multi-agent orchestration mode |
-| `/ultrawork` | Maximum performance with parallel agents |
-| `/plan` | Start planning session with Prometheus |
-| `/prometheus` | Strategic planning with interviews |
-| `/review` | Critical plan review with Momus |
-| `/orchestrator` | Complex multi-step task coordination |
-| `/deepsearch` | Thorough codebase search |
-| `/analyze` | Deep analysis and investigation |
-| `/simplify` | Code simplification and cleanup |
-| `/ralph-loop` | Self-referential loop until completion |
-| `/cancel-ralph` | Cancel active Ralph Loop |
-| `/update` | Check for updates |
-| `/sisyphus-default` | Set Sisyphus as default mode |
-
----
-
-*Last updated: 2025*
+*Last updated: 2026*

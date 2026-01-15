@@ -1,0 +1,16 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/plugins/marketplace.schema.json",
+  "name": "spc-ai-team-marketplace",
+  "description": "SPC AI Team Plugin Marketplace",
+  "plugins": [
+    {
+      "name": "spc-ai-team",
+      "description": "SPC (Single Person Company) AI Team - Multi-agent orchestration system with specialized agents for PM, Architect, Designer, Developer, QA, and Technical Writer roles.",
+      "path": ".",
+      "tags": ["ai-team", "multi-agent", "orchestration", "productivity", "automation"],
+      "author": {
+        "name": "Sungman Cho"
+      }
+    }
+  ]
+}

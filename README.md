@@ -2,86 +2,57 @@
 
 > **AI Team Simulation for Solo Founders**
 
-SPC AI Team is a Claude Code plugin that gives solo founders a 6-person AI expert team for building products from idea to delivery. Works standalone or as an add-on to [Oh-My-Claude-Sisyphus](https://github.com/Yeachan-Heo/oh-my-claude-sisyphus).
+SPC (Single Person Company) AI Team is a Claude Code plugin that gives solo founders a **17-agent AI development team** for building products from idea to delivery.
 
 ## Features
 
-- **6 Specialized SPC Agents** - PM, Architect, Designer, Developer, QA, Writer
-- **Smart Installation** - Auto-detects existing Sisyphus and adapts accordingly
+- **17 Specialized Agents** - 6 core team + 11 internal delegation agents
+- **Plugin Architecture** - Clean installation with auto-registration
 - **BMAD Workflow** - Structured product development process
 - **CLI Native** - Works directly in Claude Code
 - **Auto Documentation** - PRDs, specs, test reports generated automatically
 
 ## Quick Start
 
-### One-liner Install (Recommended)
+### Installation
+
+**One-liner (Recommended)**
 
 ```bash
-# Option 1: curl (no dependencies)
-curl -fsSL https://raw.githubusercontent.com/sungmancho/spc-ai-team/main/install-remote.sh | sh
-
-# Option 2: npx (requires Node.js)
-npx spc-ai-team
-
-# Option 3: npm global install
-npm install -g spc-ai-team && spc-ai-team
+curl -fsSL https://raw.githubusercontent.com/sungmancho/spc-ai-team/main/install-remote.sh | bash
 ```
 
-### Manual Install
+**Or clone and install**
 
 ```bash
 git clone https://github.com/sungmancho/spc-ai-team.git
-cd spc-ai-team && ./install.sh
+cd spc-ai-team
+./install.sh
+```
+
+You should see:
+```
+╔════════════════════════════════════════════════════════╗
+║  SPC AI Team Plugin installed successfully!            ║
+╚════════════════════════════════════════════════════════╝
+
+  Location: ~/.claude/plugins/spc-ai-team/
+  Installed:
+    Agents: 17
+    Commands: 9
+
+  ✓ Auto-registered in settings.json
 ```
 
 ### Start Using
 
 ```bash
-# In Claude Code
+# Start a new Claude Code session
+claude
+
+# Use the full team
 /spc "Add a login feature with email and password"
 ```
-
-**New to SPC?** Read the [Getting Started Guide](./docs/GETTING_STARTED.md)
-
-## Smart Installation
-
-The installer automatically detects your environment and adapts:
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    ./install.sh                             │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  Sisyphus detected?                                         │
-│  ┌────────────┐              ┌────────────┐                │
-│  │     No     │              │    Yes     │                │
-│  └─────┬──────┘              └─────┬──────┘                │
-│        ↓                           ↓                        │
-│  ┌────────────────┐        ┌────────────────┐              │
-│  │  Full Install  │        │  Add-on Only   │              │
-│  │ • SPC agents   │        │ • SPC agents   │              │
-│  │ • SPC commands │        │ • SPC commands │              │
-│  │ • Sisyphus     │        │ (Sisyphus kept)│              │
-│  │   commands     │        │                │              │
-│  └────────────────┘        └────────────────┘              │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Installation Scenarios
-
-| Scenario | What Gets Installed | Commands Available |
-|----------|--------------------|--------------------|
-| **New user** | Full package (SPC + Sisyphus) | `/spc`, `/sisyphus`, `/ultrawork`, etc. |
-| **Existing Sisyphus user** | SPC only (add-on) | `/spc` + existing Sisyphus commands |
-
-## Documentation
-
-| Document | Description |
-|----------|-------------|
-| [Getting Started](./docs/GETTING_STARTED.md) | Installation and first steps |
-| [Example Workflow](./docs/EXAMPLE_WORKFLOW.md) | Complete worked example |
-| [FAQ](./docs/FAQ.md) | Common questions and troubleshooting |
 
 ## Usage
 
@@ -93,7 +64,7 @@ Let PM analyze and orchestrate the team:
 /spc "Build a todo list with CRUD operations"
 ```
 
-### Individual SPC Agents
+### Individual Agents
 
 Invoke specific agents directly:
 
@@ -106,16 +77,6 @@ Invoke specific agents directly:
 /spc:writer "Document the REST API"
 ```
 
-### Sisyphus Orchestration (if installed)
-
-Use powerful orchestration commands:
-
-```
-/sisyphus "Refactor the authentication module"
-/ultrawork "Build the entire API layer"
-/plan "Design a notification system"
-```
-
 ### Utility Commands
 
 ```
@@ -125,26 +86,32 @@ Use powerful orchestration commands:
 
 ## The AI Team
 
-### SPC Core Team
+### Core Team (6 agents)
 
 | Agent | Emoji | Model | Specialty |
 |-------|-------|-------|-----------|
 | **PM** | 🧑‍💼 | Opus | Requirements, PRD, team orchestration |
 | **Architect** | 🏗️ | Opus | Tech stack, API design, DB schema |
-| **Designer** | 🎨 | Sonnet | UI/UX, wireframes, design system |
-| **Developer** | 💻 | Sonnet | Code implementation, migrations |
-| **QA** | 🧪 | Sonnet | Testing, quality validation |
-| **Writer** | 📝 | Sonnet | Documentation, README, API docs |
+| **Designer** | 🎨 | Opus | UI/UX, wireframes, design system |
+| **Developer** | 💻 | Opus | Code implementation, migrations |
+| **QA** | 🧪 | Opus | Testing, quality validation |
+| **Writer** | 📝 | Opus | Documentation, README, API docs |
 
-### Sisyphus Specialist Agents (Full Install)
+### Internal Delegation Agents (11 agents)
 
 | Agent | Model | Purpose |
 |-------|-------|---------|
 | **Oracle** | Opus | Architecture & debugging |
 | **Prometheus** | Opus | Strategic planning |
 | **Momus** | Opus | Plan review & criticism |
-| **Librarian** | Sonnet | Documentation research |
+| **Metis** | Opus | Pre-planning analysis |
+| **Orchestrator** | Opus | Task coordination |
+| **Sisyphus-Junior** | Opus | Focused execution |
+| **Librarian** | Opus | Documentation research |
+| **Frontend-Engineer** | Opus | UI/UX implementation |
+| **Multimodal-Looker** | Opus | Visual analysis |
 | **Explore** | Haiku | Fast codebase search |
+| **Document-Writer** | Haiku | Technical writing |
 
 ## Workflow
 
@@ -182,97 +149,136 @@ SPC creates a `.spc/` directory in your project:
 └── handoffs/          # Agent handoff records
 ```
 
-## Project Structure
+## Installation Details
+
+### What Gets Installed
 
 ```
-spc-ai-team/
-├── install.sh          # Smart installation script
-├── uninstall.sh        # Clean uninstallation
-├── commands/           # Slash commands
-│   ├── spc.md          # /spc (main)
-│   ├── spc-pm.md       # /spc:pm
-│   └── ...
-├── agents/             # Agent definitions
-│   ├── spc-pm.md
-│   ├── spc-architect.md
-│   └── ...
-├── docs/
-│   ├── GETTING_STARTED.md
-│   ├── EXAMPLE_WORKFLOW.md
-│   └── FAQ.md
-├── spc-claude.md       # CLAUDE.md integration
+~/.claude/plugins/spc-ai-team/
+├── .claude-plugin/
+│   └── plugin.json       # Plugin metadata
+├── agents/               # 17 agent definitions
+├── commands/             # 9 slash commands
+├── protocols/            # Orchestration patterns
+├── skills/               # Skill definitions
+├── hooks/                # Session hooks
 └── README.md
-```
-
-## Requirements
-
-- **Claude Code CLI** (required)
-- **Oh-My-Claude-Sisyphus** (optional, for full orchestration features)
-
-## Installation
-
-### Method 1: One-liner (Recommended)
-
-```bash
-# curl (works on any system with curl/wget)
-curl -fsSL https://raw.githubusercontent.com/sungmancho/spc-ai-team/main/install-remote.sh | sh
-
-# Or use npm/npx if you have Node.js
-npx spc-ai-team
-```
-
-### Method 2: npm Global Install
-
-```bash
-npm install -g spc-ai-team
-spc-ai-team
-```
-
-### Method 3: Manual Install
-
-```bash
-git clone https://github.com/sungmancho/spc-ai-team.git
-cd spc-ai-team
-./install.sh
-```
-
-### With Sisyphus (Full Features)
-
-For the full experience with advanced orchestration, install Sisyphus first:
-
-```bash
-# 1. Install Sisyphus
-git clone https://github.com/Yeachan-Heo/oh-my-claude-sisyphus.git
-cd oh-my-claude-sisyphus && ./install.sh
-
-# 2. Install SPC (auto-detects Sisyphus, installs as add-on)
-curl -fsSL https://raw.githubusercontent.com/sungmancho/spc-ai-team/main/install-remote.sh | sh
 ```
 
 ### Verify Installation
 
 ```bash
-# SPC commands (always installed)
-ls ~/.claude/commands/spc*.md  # Should show 9 files
+# Check plugin directory
+ls ~/.claude/plugins/spc-ai-team/
 
-# SPC agents (always installed)
-ls ~/.claude/agents/spc-{pm,architect,designer,developer,qa,writer}.md
+# Check agents (should show 17 files)
+ls ~/.claude/plugins/spc-ai-team/agents/
+
+# Check commands (should show 9 files)
+ls ~/.claude/plugins/spc-ai-team/commands/
+
+# Check plugin registration
+grep "spc-ai-team" ~/.claude/settings.json
+```
+
+### Manual Installation
+
+If the installer doesn't work, you can install manually:
+
+```bash
+# 1. Create plugin directory
+mkdir -p ~/.claude/plugins/spc-ai-team
+
+# 2. Copy plugin contents
+cp -r .claude-plugin agents commands protocols skills hooks README.md ~/.claude/plugins/spc-ai-team/
+
+# 3. Register plugin in settings.json
+# Add to ~/.claude/settings.json:
+{
+  "enabledPlugins": {
+    "spc-ai-team@local": true
+  }
+}
 ```
 
 ## Uninstall
 
 ```bash
-./uninstall.sh
+# Remove plugin directory
+rm -rf ~/.claude/plugins/spc-ai-team
+
+# Remove from settings.json (optional)
+# Edit ~/.claude/settings.json and remove "spc-ai-team@local" entry
 ```
 
-- Only removes SPC components
-- Preserves existing Sisyphus installation (if add-on mode)
-- Backups kept in `~/.claude/backup/`
+## Requirements
 
-## Related Projects
+- **Claude Code CLI** (required)
+- Claude Code subscription with access to Opus model
 
-- [Oh-My-Claude-Sisyphus](https://github.com/Yeachan-Heo/oh-my-claude-sisyphus) - Multi-agent orchestration system
-- [BMAD](https://github.com/aj-geddes/claude-code-bmad-skills) - Build-Measure-Analyze-Decide methodology
+## Documentation
+
+| Document | Description |
+|----------|-------------|
+| [Getting Started](./docs/GETTING_STARTED.md) | Installation and first steps |
+| [Example Workflow](./docs/EXAMPLE_WORKFLOW.md) | Complete worked example |
+| [FAQ](./docs/FAQ.md) | Common questions and troubleshooting |
+
+## Project Structure
+
+```
+spc-ai-team/
+├── install.sh              # Local installation script
+├── install-remote.sh       # Remote installation (curl)
+├── uninstall.sh            # Clean uninstallation
+├── .claude-plugin/
+│   └── plugin.json         # Plugin metadata
+├── commands/               # Slash commands (9 files)
+│   ├── spc.md              # /spc (main)
+│   ├── spc-pm.md           # /spc:pm
+│   ├── spc-architect.md    # /spc:architect
+│   ├── spc-designer.md     # /spc:designer
+│   ├── spc-dev.md          # /spc:dev
+│   ├── spc-qa.md           # /spc:qa
+│   ├── spc-writer.md       # /spc:writer
+│   ├── spc-status.md       # /spc:status
+│   └── spc-artifacts.md    # /spc:artifacts
+├── agents/                 # Agent definitions (17 files)
+│   ├── spc-pm.md
+│   ├── spc-architect.md
+│   ├── spc-designer.md
+│   ├── spc-developer.md
+│   ├── spc-qa.md
+│   ├── spc-writer.md
+│   ├── spc-oracle.md
+│   ├── spc-prometheus.md
+│   ├── spc-momus.md
+│   ├── spc-metis.md
+│   ├── spc-orchestrator.md
+│   ├── spc-sisyphus-junior.md
+│   ├── spc-librarian.md
+│   ├── spc-frontend-engineer.md
+│   ├── spc-multimodal-looker.md
+│   ├── spc-explore.md
+│   └── spc-document-writer.md
+├── protocols/
+├── skills/
+├── hooks/
+├── docs/
+│   ├── GETTING_STARTED.md
+│   ├── EXAMPLE_WORKFLOW.md
+│   └── FAQ.md
+├── spc-claude.md           # CLAUDE.md integration
+└── README.md
+```
+
+## Acknowledgments
+
+This project was created with inspiration from these excellent projects:
+
+- **[oh-my-opencode](https://github.com/code-yeongyu/oh-my-opencode)** - Original multi-agent framework for Claude Code
+- **[Oh-My-Claude-Sisyphus](https://github.com/Yeachan-Heo/oh-my-claude-sisyphus)** - Multi-agent orchestration system
+- **[BMAD](https://github.com/aj-geddes/claude-code-bmad-skills)** - Build-Measure-Analyze-Decide methodology
 
 ## License
 
