@@ -47,7 +47,7 @@ echo -e "${BLUE}Extracting...${NC}"
 tar -xzf "$TMP_DIR/spc-ai-team.tar.gz" -C "$TMP_DIR"
 
 # Find extracted directory (handles branch name in folder)
-EXTRACTED_DIR=$(find "$TMP_DIR" -maxdepth 1 -type d -name "spc-ai-team*" | head -1)
+EXTRACTED_DIR=$(find "$TMP_DIR" -maxdepth 1 -type d -name "single-person-company*" | head -1)
 
 if [ -z "$EXTRACTED_DIR" ]; then
     echo -e "${RED}Error: Failed to extract archive${NC}"
