@@ -10,165 +10,74 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 
 echo -e "${GREEN}╔════════════════════════════════════════════════════════╗${NC}"
-echo -e "${GREEN}║          SPC AI Team Plugin Installer v2.1             ║${NC}"
+echo -e "${GREEN}║          SPC AI Team Installer v3.0                    ║${NC}"
 echo -e "${GREEN}╚════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
 # Paths
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLAUDE_DIR="$HOME/.claude"
-PLUGIN_NAME="spc-ai-team"
-PLUGIN_DIR="$CLAUDE_DIR/plugins/$PLUGIN_NAME"
-SETTINGS_FILE="$CLAUDE_DIR/settings.json"
+COMMANDS_DIR="$CLAUDE_DIR/commands"
+AGENTS_DIR="$CLAUDE_DIR/agents"
 
 # Check if source files exist
-if [ ! -f "$SCRIPT_DIR/.claude-plugin/plugin.json" ]; then
-    echo -e "${RED}Error: plugin.json not found${NC}"
+if [ ! -d "$SCRIPT_DIR/commands" ] || [ ! -d "$SCRIPT_DIR/agents" ]; then
+    echo -e "${RED}Error: commands or agents directory not found${NC}"
     echo "Make sure you're running this script from the spc-ai-team directory"
     exit 1
 fi
 
-echo -e "${CYAN}Installing SPC AI Team Plugin...${NC}"
+echo -e "${CYAN}Installing SPC AI Team...${NC}"
 echo ""
 
-# Backup existing plugin if exists
-if [ -d "$PLUGIN_DIR" ]; then
-    BACKUP_DIR="$CLAUDE_DIR/backup/spc-plugin-$(date +%Y%m%d-%H%M%S)"
-    echo -e "${YELLOW}Backing up existing plugin...${NC}"
-    mkdir -p "$BACKUP_DIR"
-    cp -r "$PLUGIN_DIR" "$BACKUP_DIR/"
-    echo "  Backup saved to: $BACKUP_DIR"
-    rm -rf "$PLUGIN_DIR"
-fi
-
-# Create plugin directory
-mkdir -p "$PLUGIN_DIR"
-
-# Copy plugin structure
-echo -e "${BLUE}Installing plugin components...${NC}"
-
-# Copy core directories
-cp -r "$SCRIPT_DIR/.claude-plugin" "$PLUGIN_DIR/"
-cp -r "$SCRIPT_DIR/agents" "$PLUGIN_DIR/"
-cp -r "$SCRIPT_DIR/commands" "$PLUGIN_DIR/"
-cp -r "$SCRIPT_DIR/protocols" "$PLUGIN_DIR/"
-
-# Copy skills if exists
-if [ -d "$SCRIPT_DIR/skills" ]; then
-    cp -r "$SCRIPT_DIR/skills" "$PLUGIN_DIR/"
-fi
-
-# Copy hooks if exists
-if [ -d "$SCRIPT_DIR/hooks" ]; then
-    cp -r "$SCRIPT_DIR/hooks" "$PLUGIN_DIR/"
-    chmod +x "$PLUGIN_DIR/hooks/"*.sh 2>/dev/null || true
-fi
-
-# Copy README
-if [ -f "$SCRIPT_DIR/README.md" ]; then
-    cp "$SCRIPT_DIR/README.md" "$PLUGIN_DIR/"
-fi
-
-# Count installed components
-AGENTS_COUNT=$(ls -1 "$PLUGIN_DIR/agents/"*.md 2>/dev/null | wc -l | tr -d ' ')
-COMMANDS_COUNT=$(ls -1 "$PLUGIN_DIR/commands/"*.md 2>/dev/null | wc -l | tr -d ' ')
+# Create directories
+mkdir -p "$COMMANDS_DIR"
+mkdir -p "$AGENTS_DIR"
 
 # ============================================================
-# AUTO-REGISTER PLUGIN IN SETTINGS.JSON
+# INSTALL COMMANDS
 # ============================================================
-echo -e "${BLUE}Registering plugin...${NC}"
+echo -e "${BLUE}Installing commands to ~/.claude/commands/...${NC}"
 
-if [ ! -f "$SETTINGS_FILE" ]; then
-    # Create new settings.json
-    echo '{
-  "enabledPlugins": {
-    "spc-ai-team@local": true
-  }
-}' > "$SETTINGS_FILE"
-    echo "  Created settings.json with plugin enabled"
-elif grep -q '"enabledPlugins"' "$SETTINGS_FILE"; then
-    # enabledPlugins exists, check if our plugin is already there
-    if grep -q '"spc-ai-team@local"' "$SETTINGS_FILE"; then
-        echo "  Plugin already registered"
-    else
-        # Add our plugin to existing enabledPlugins
-        # Use sed to add our plugin before the closing brace of enabledPlugins
-        if [[ "$OSTYPE" == "darwin"* ]]; then
-            # macOS sed
-            sed -i '' 's/"enabledPlugins": {/"enabledPlugins": {\n    "spc-ai-team@local": true,/' "$SETTINGS_FILE"
-        else
-            # GNU sed
-            sed -i 's/"enabledPlugins": {/"enabledPlugins": {\n    "spc-ai-team@local": true,/' "$SETTINGS_FILE"
-        fi
-        echo "  Added plugin to settings.json"
+# Backup existing SPC commands if any
+BACKUP_NEEDED=false
+if ls "$COMMANDS_DIR"/spc*.md 1>/dev/null 2>&1; then
+    BACKUP_DIR="$CLAUDE_DIR/backup/spc-$(date +%Y%m%d-%H%M%S)"
+    mkdir -p "$BACKUP_DIR/commands"
+    cp "$COMMANDS_DIR"/spc*.md "$BACKUP_DIR/commands/"
+    BACKUP_NEEDED=true
+    echo -e "${YELLOW}  Backed up existing SPC commands${NC}"
+fi
+
+# Copy commands
+cp "$SCRIPT_DIR"/commands/*.md "$COMMANDS_DIR/"
+COMMANDS_COUNT=$(ls -1 "$SCRIPT_DIR/commands/"*.md 2>/dev/null | wc -l | tr -d ' ')
+echo -e "  ${GREEN}✓${NC} Installed $COMMANDS_COUNT commands"
+
+# ============================================================
+# INSTALL AGENTS
+# ============================================================
+echo -e "${BLUE}Installing agents to ~/.claude/agents/...${NC}"
+
+# Backup existing SPC agents if any
+if ls "$AGENTS_DIR"/spc-*.md 1>/dev/null 2>&1; then
+    if [ "$BACKUP_NEEDED" = false ]; then
+        BACKUP_DIR="$CLAUDE_DIR/backup/spc-$(date +%Y%m%d-%H%M%S)"
     fi
-else
-    # No enabledPlugins, need to add it
-    # Create a temp file with the new content
-    TMP_FILE=$(mktemp)
-    # Read existing JSON and add enabledPlugins
-    if command -v jq &> /dev/null; then
-        jq '. + {"enabledPlugins": {"spc-ai-team@local": true}}' "$SETTINGS_FILE" > "$TMP_FILE"
-        mv "$TMP_FILE" "$SETTINGS_FILE"
-    else
-        # Fallback: simple sed approach
-        if [[ "$OSTYPE" == "darwin"* ]]; then
-            sed -i '' 's/^{/{\'$'\n  "enabledPlugins": { "spc-ai-team@local": true },/' "$SETTINGS_FILE"
-        else
-            sed -i 's/^{/{\n  "enabledPlugins": { "spc-ai-team@local": true },/' "$SETTINGS_FILE"
-        fi
-    fi
-    echo "  Added enabledPlugins section to settings.json"
+    mkdir -p "$BACKUP_DIR/agents"
+    cp "$AGENTS_DIR"/spc-*.md "$BACKUP_DIR/agents/"
+    BACKUP_NEEDED=true
+    echo -e "${YELLOW}  Backed up existing SPC agents${NC}"
 fi
 
-# ============================================================
-# REGISTER IN INSTALLED_PLUGINS.JSON
-# ============================================================
-INSTALLED_PLUGINS_FILE="$CLAUDE_DIR/plugins/installed_plugins.json"
-CURRENT_DATE=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
+# Copy agents
+cp "$SCRIPT_DIR"/agents/*.md "$AGENTS_DIR/"
+AGENTS_COUNT=$(ls -1 "$SCRIPT_DIR/agents/"*.md 2>/dev/null | wc -l | tr -d ' ')
+echo -e "  ${GREEN}✓${NC} Installed $AGENTS_COUNT agents"
 
-echo -e "${BLUE}Registering in installed_plugins.json...${NC}"
-
-if [ ! -f "$INSTALLED_PLUGINS_FILE" ]; then
-    # Create new installed_plugins.json
-    cat > "$INSTALLED_PLUGINS_FILE" << EOF
-{
-  "version": 2,
-  "plugins": {
-    "spc-ai-team@local": [
-      {
-        "scope": "user",
-        "installPath": "$PLUGIN_DIR",
-        "version": "1.0.0",
-        "installedAt": "$CURRENT_DATE",
-        "lastUpdated": "$CURRENT_DATE"
-      }
-    ]
-  }
-}
-EOF
-    echo "  Created installed_plugins.json"
-elif command -v jq &> /dev/null; then
-    # Use jq to add/update plugin entry
-    TMP_FILE=$(mktemp)
-    jq --arg path "$PLUGIN_DIR" --arg date "$CURRENT_DATE" '
-      .plugins["spc-ai-team@local"] = [{
-        "scope": "user",
-        "installPath": $path,
-        "version": "1.0.0",
-        "installedAt": $date,
-        "lastUpdated": $date
-      }]
-    ' "$INSTALLED_PLUGINS_FILE" > "$TMP_FILE"
-    mv "$TMP_FILE" "$INSTALLED_PLUGINS_FILE"
-    echo "  Registered plugin"
-else
-    # Fallback without jq - check if already registered
-    if grep -q '"spc-ai-team@local"' "$INSTALLED_PLUGINS_FILE"; then
-        echo "  Plugin already in installed_plugins.json"
-    else
-        echo -e "${YELLOW}  Warning: jq not found. Please install jq or manually add plugin to installed_plugins.json${NC}"
-    fi
+if [ "$BACKUP_NEEDED" = true ]; then
+    echo ""
+    echo -e "  ${YELLOW}Backup saved to: $BACKUP_DIR${NC}"
 fi
 
 # ============================================================
@@ -176,21 +85,18 @@ fi
 # ============================================================
 echo ""
 echo -e "${GREEN}╔════════════════════════════════════════════════════════╗${NC}"
-echo -e "${GREEN}║  SPC AI Team Plugin installed successfully!            ║${NC}"
+echo -e "${GREEN}║  SPC AI Team installed successfully!                   ║${NC}"
 echo -e "${GREEN}╚════════════════════════════════════════════════════════╝${NC}"
 echo ""
-echo -e "  ${BLUE}Location:${NC} $PLUGIN_DIR"
 echo -e "  ${BLUE}Installed:${NC}"
-echo "    Agents: $AGENTS_COUNT"
-echo "    Commands: $COMMANDS_COUNT"
-echo ""
-echo -e "  ${GREEN}✓${NC} Auto-registered in settings.json"
+echo "    Commands: $COMMANDS_COUNT → ~/.claude/commands/"
+echo "    Agents:   $AGENTS_COUNT → ~/.claude/agents/"
 echo ""
 echo -e "${GREEN}Quick Start:${NC}"
 echo "  /spc \"your request\"        - Full AI team workflow"
-echo "  /spc:pm \"analyze this\"     - Invoke PM directly"
-echo "  /spc:architect \"design\"    - Invoke Architect directly"
-echo "  /spc:status                - Check project status"
+echo "  /spc-pm \"analyze this\"     - Invoke PM directly"
+echo "  /spc-architect \"design\"    - Invoke Architect directly"
+echo "  /spc-status                - Check project status"
 echo ""
-echo -e "${CYAN}Start a new Claude Code session to use the plugin.${NC}"
+echo -e "${CYAN}Start a new Claude Code session to use the commands.${NC}"
 echo ""
