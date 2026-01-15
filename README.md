@@ -7,7 +7,7 @@ SPC (Single Person Company) AI Team is a Claude Code plugin that gives solo foun
 ## Features
 
 - **17 Specialized Agents** - 6 core team + 11 internal delegation agents
-- **Plugin Architecture** - Clean installation with auto-registration
+- **Simple Installation** - Direct copy to ~/.claude/commands/ and agents/
 - **BMAD Workflow** - Structured product development process
 - **CLI Native** - Works directly in Claude Code
 - **Auto Documentation** - PRDs, specs, test reports generated automatically
@@ -33,15 +33,12 @@ cd spc-ai-team
 You should see:
 ```
 ╔════════════════════════════════════════════════════════╗
-║  SPC AI Team Plugin installed successfully!            ║
+║  SPC AI Team installed successfully!                   ║
 ╚════════════════════════════════════════════════════════╝
 
-  Location: ~/.claude/plugins/spc-ai-team/
   Installed:
-    Agents: 17
-    Commands: 9
-
-  ✓ Auto-registered in settings.json
+    Commands: 9 → ~/.claude/commands/
+    Agents:   17 → ~/.claude/agents/
 ```
 
 ### Start Using
@@ -69,19 +66,19 @@ Let PM analyze and orchestrate the team:
 Invoke specific agents directly:
 
 ```
-/spc:pm "Analyze requirements for auth system"
-/spc:architect "Design API for blog platform"
-/spc:designer "Create wireframes for dashboard"
-/spc:dev "Implement the login component"
-/spc:qa "Test the checkout flow"
-/spc:writer "Document the REST API"
+/spc-pm "Analyze requirements for auth system"
+/spc-architect "Design API for blog platform"
+/spc-designer "Create wireframes for dashboard"
+/spc-dev "Implement the login component"
+/spc-qa "Test the checkout flow"
+/spc-writer "Document the REST API"
 ```
 
 ### Utility Commands
 
 ```
-/spc:status     # Check project status
-/spc:artifacts  # List generated documents
+/spc-status     # Check project status
+/spc-artifacts  # List generated documents
 ```
 
 ## The AI Team
@@ -154,31 +151,26 @@ SPC creates a `.spc/` directory in your project:
 ### What Gets Installed
 
 ```
-~/.claude/plugins/spc-ai-team/
-├── .claude-plugin/
-│   └── plugin.json       # Plugin metadata
-├── agents/               # 17 agent definitions
+~/.claude/
 ├── commands/             # 9 slash commands
-├── protocols/            # Orchestration patterns
-├── skills/               # Skill definitions
-├── hooks/                # Session hooks
-└── README.md
+│   ├── spc.md
+│   ├── spc-pm.md
+│   ├── spc-architect.md
+│   └── ...
+└── agents/               # 17 agent definitions
+    ├── spc-pm.md
+    ├── spc-architect.md
+    └── ...
 ```
 
 ### Verify Installation
 
 ```bash
-# Check plugin directory
-ls ~/.claude/plugins/spc-ai-team/
+# Check commands (should show 9 spc files)
+ls ~/.claude/commands/spc*.md
 
-# Check agents (should show 17 files)
-ls ~/.claude/plugins/spc-ai-team/agents/
-
-# Check commands (should show 9 files)
-ls ~/.claude/plugins/spc-ai-team/commands/
-
-# Check plugin registration
-grep "spc-ai-team" ~/.claude/settings.json
+# Check agents (should show 17 spc files)
+ls ~/.claude/agents/spc-*.md
 ```
 
 ### Manual Installation
@@ -186,29 +178,23 @@ grep "spc-ai-team" ~/.claude/settings.json
 If the installer doesn't work, you can install manually:
 
 ```bash
-# 1. Create plugin directory
-mkdir -p ~/.claude/plugins/spc-ai-team
+# 1. Clone repository
+git clone https://github.com/sungmanch/single-person-company.git
+cd single-person-company
 
-# 2. Copy plugin contents
-cp -r .claude-plugin agents commands protocols skills hooks README.md ~/.claude/plugins/spc-ai-team/
-
-# 3. Register plugin in settings.json
-# Add to ~/.claude/settings.json:
-{
-  "enabledPlugins": {
-    "spc-ai-team@local": true
-  }
-}
+# 2. Copy commands and agents
+cp commands/*.md ~/.claude/commands/
+cp agents/*.md ~/.claude/agents/
 ```
 
 ## Uninstall
 
 ```bash
-# Remove plugin directory
-rm -rf ~/.claude/plugins/spc-ai-team
+# Remove SPC commands
+rm ~/.claude/commands/spc*.md
 
-# Remove from settings.json (optional)
-# Edit ~/.claude/settings.json and remove "spc-ai-team@local" entry
+# Remove SPC agents
+rm ~/.claude/agents/spc-*.md
 ```
 
 ## Requirements
