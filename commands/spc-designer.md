@@ -2,7 +2,7 @@
 description: Invoke SPC Designer agent directly for UI/UX design
 ---
 
-[SPC DESIGNER AGENT] 🎨
+[SPC DESIGNER AGENT]
 
 $ARGUMENTS
 

@@ -1,10 +1,10 @@
 # Orchestration Patterns
 
-이 문서는 SPC 에이전트들이 서로를 호출할 때 사용하는 **실제 Task tool 구문**을 제공합니다.
+This document provides the **actual Task tool syntax** used when SPC agents invoke each other.
 
 ## Pattern 1: Sequential Agent Invocation
 
-한 에이전트를 호출하고 완료를 기다린 후 다음으로 진행:
+Invoke one agent, wait for completion, then proceed to the next:
 
 ```
 # Step 1: Generate handoff
@@ -31,7 +31,7 @@ Read(.spc/markers/designer-{feature}-complete.yaml)
 
 ## Pattern 2: Parallel Agent Invocation
 
-여러 에이전트를 동시에 백그라운드로 실행:
+Run multiple agents simultaneously in the background:
 
 ```
 # Step 1: Generate handoffs for both agents
@@ -80,7 +80,7 @@ Read(.spc/markers/architect-{feature}-complete.yaml)
 
 ## Pattern 3: Marker Polling
 
-마커 파일이 생성될 때까지 대기:
+Wait until marker files are created:
 
 ```bash
 # Single marker check
@@ -108,7 +108,7 @@ done
 
 ## Pattern 4: Error Handling
 
-에러 마커 확인 및 처리:
+Check and handle error markers:
 
 ```
 # Check for error marker after timeout
@@ -121,7 +121,7 @@ fi
 
 ## Pattern 5: Handoff Generation Before Invocation
 
-Task tool을 호출하기 **전에** 핸드오프를 생성:
+Generate handoff **before** invoking the Task tool:
 
 ```
 # Step 1: Reflect on what you completed

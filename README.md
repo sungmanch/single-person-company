@@ -1,10 +1,8 @@
 # SPC AI Team
 
-> **AI Team Simulation for Solo Founders** | **솔로 파운더를 위한 AI 팀 시뮬레이션**
+> **AI Team Simulation for Solo Founders**
 
 SPC AI Team is a Claude Code plugin that gives solo founders a 6-person AI expert team for building products from idea to delivery. Works standalone or as an add-on to [Oh-My-Claude-Sisyphus](https://github.com/Yeachan-Heo/oh-my-claude-sisyphus).
-
-SPC AI Team은 Claude Code 플러그인으로, 솔로 파운더가 6명의 AI 전문가 팀과 협업하여 아이디어부터 배포까지 제품을 만들 수 있게 해줍니다.
 
 ## Features
 
@@ -283,5 +281,3 @@ MIT License - see [LICENSE](./LICENSE) for details.
 ---
 
 **Vision**: Enable solo founders to build products with the efficiency of a full team through AI-powered collaboration.
-
-**비전**: AI 협업을 통해 솔로 파운더가 완전한 팀의 효율성으로 제품을 만들 수 있게 합니다.

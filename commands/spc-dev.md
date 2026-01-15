@@ -2,7 +2,7 @@
 description: Invoke SPC Developer agent directly for code implementation
 ---
 
-[SPC DEVELOPER AGENT] 💻
+[SPC DEVELOPER AGENT]
 
 $ARGUMENTS
 

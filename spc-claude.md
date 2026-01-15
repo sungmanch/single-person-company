@@ -40,13 +40,13 @@ Skills work in **three layers** that stack additively:
 
 | Command | Description |
 |---------|-------------|
-| `/spc <요청>` | Full AI team workflow (PM-first) |
-| `/spc:pm <요청>` | Product Manager |
-| `/spc:architect <요청>` | Software Architect |
-| `/spc:designer <요청>` | UI/UX Designer |
-| `/spc:dev <요청>` | Full-Stack Developer |
-| `/spc:qa <요청>` | QA Engineer |
-| `/spc:writer <요청>` | Technical Writer |
+| `/spc <request>` | Full AI team workflow (PM-first) |
+| `/spc:pm <request>` | Product Manager |
+| `/spc:architect <request>` | Software Architect |
+| `/spc:designer <request>` | UI/UX Designer |
+| `/spc:dev <request>` | Full-Stack Developer |
+| `/spc:qa <request>` | QA Engineer |
+| `/spc:writer <request>` | Technical Writer |
 | `/spc:status` | Check project status |
 | `/spc:artifacts` | List generated artifacts |
 

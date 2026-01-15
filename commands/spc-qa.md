@@ -2,7 +2,7 @@
 description: Invoke SPC QA agent directly for testing and validation
 ---
 
-[SPC QA AGENT] 🧪
+[SPC QA AGENT]
 
 $ARGUMENTS
 

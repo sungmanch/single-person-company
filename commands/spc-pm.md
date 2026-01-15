@@ -2,7 +2,7 @@
 description: Invoke SPC PM agent directly for requirements analysis and PRD creation
 ---
 
-[SPC PM AGENT] 🧑‍💼
+[SPC PM AGENT]
 
 $ARGUMENTS
 

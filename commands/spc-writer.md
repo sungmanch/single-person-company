@@ -2,7 +2,7 @@
 description: Invoke SPC Technical Writer agent directly for documentation
 ---
 
-[SPC TECHNICAL WRITER AGENT] 📝
+[SPC TECHNICAL WRITER AGENT]
 
 $ARGUMENTS
 

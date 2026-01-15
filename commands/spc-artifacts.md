@@ -2,7 +2,7 @@
 description: List all SPC artifacts in the current project
 ---
 
-[SPC ARTIFACTS] 📁
+[SPC ARTIFACTS]
 
 ## List All SPC Artifacts
 
@@ -28,11 +28,11 @@ echo "=== Handoffs ===" && ls -la .spc/handoffs/ 2>/dev/null || echo "None"
 
 | Type | Location | Created By |
 |------|----------|------------|
-| PRD | `.spc/docs/prd/` | 🧑‍💼 PM |
-| Architecture | `.spc/docs/architecture/` | 🏗️ Architect |
-| Design | `.spc/docs/design/` | 🎨 Designer |
-| Stories | `.spc/stories/` | 💻 Developer |
-| QA Reports | `.spc/qa-reports/` | 🧪 QA |
+| PRD | `.spc/docs/prd/` | Product Manager |
+| Architecture | `.spc/docs/architecture/` | Architect |
+| Design | `.spc/docs/design/` | Designer |
+| Stories | `.spc/stories/` | Developer |
+| QA Reports | `.spc/qa-reports/` | QA Engineer |
 | Handoffs | `.spc/handoffs/` | All Agents |
 
 ### Reading Artifacts

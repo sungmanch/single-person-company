@@ -1,41 +1,41 @@
 # Single Person Company (SPC) Plugin Development
 
-## 경로 주의사항
+## Path Warnings
 
-이 프로젝트는 Claude Code 플러그인 개발 프로젝트입니다.
+This is a Claude Code plugin development project.
 
-### 개발 경로 vs 설치 경로
+### Development Path vs Installation Path
 
-| 구분 | 경로 | 용도 |
-|------|------|------|
-| **개발 경로 (소스)** | `/Users/sungmancho/projects/single-person-company/` | 코드 수정은 여기서! |
-| **설치 경로** | `~/.claude/plugins/spc-ai-team/` | 테스트용 (수정 금지) |
+| Category | Path | Purpose |
+|----------|------|---------|
+| **Development Path (Source)** | `/Users/sungmancho/projects/single-person-company/` | Edit code here! |
+| **Installation Path** | `~/.claude/plugins/spc-ai-team/` | Testing only (do not edit) |
 
-### 절대 하면 안 되는 것
+### Do NOT Do This
 
-- `~/.claude/plugins/` 안의 파일을 직접 수정하지 마세요
-- 설치된 플러그인 폴더 안에서 코드를 편집하지 마세요
-- 설치 경로의 변경사항은 다음 설치 시 덮어씌워집니다
+- Do not directly modify files inside `~/.claude/plugins/`
+- Do not edit code inside the installed plugin folder
+- Changes in the installation path will be overwritten on next installation
 
-### 올바른 개발 워크플로우
+### Correct Development Workflow
 
-1. **코드 수정**: 항상 이 디렉토리 (`/Users/sungmancho/projects/single-person-company/`)에서 수정
-2. **설치**: `npm run install:plugin` 또는 해당 설치 스크립트 실행
-3. **테스트**: 새 Claude Code 세션에서 테스트
-4. **반복**: 1번부터 다시
+1. **Code Editing**: Always edit in this directory (`/Users/sungmancho/projects/single-person-company/`)
+2. **Installation**: Run `npm run install:plugin` or the corresponding installation script
+3. **Testing**: Test in a new Claude Code session
+4. **Repeat**: Go back to step 1
 
-### 파일 수정 전 확인
+### Before Editing Files
 
-파일을 수정하기 전에 항상 현재 경로를 확인하세요:
-- `/Users/sungmancho/projects/single-person-company/` 로 시작하면 OK
-- `~/.claude/` 또는 `/Users/sungmancho/.claude/` 로 시작하면 STOP
+Always verify your current path before editing:
+- If it starts with `/Users/sungmancho/projects/single-person-company/` - OK
+- If it starts with `~/.claude/` or `/Users/sungmancho/.claude/` - STOP
 
-## 빠른 참조
+## Quick Reference
 
 ```bash
-# 현재 경로 확인
+# Check current path
 pwd
 
-# 올바른 개발 경로로 이동
+# Move to correct development path
 cd /Users/sungmancho/projects/single-person-company/
 ```

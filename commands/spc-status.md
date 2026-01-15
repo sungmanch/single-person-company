@@ -2,7 +2,7 @@
 description: Show SPC project status and artifacts
 ---
 
-[SPC STATUS] 📊
+[SPC STATUS]
 
 ## Project Status Check
 
@@ -41,11 +41,11 @@ Check the current state of the SPC project.
 ```
 
 ### Status Indicators
-- 📋 PRD exists: `.spc/docs/prd/*.md`
-- 🏗️ Architecture exists: `.spc/docs/architecture/*.md`
-- 🎨 Design exists: `.spc/docs/design/*.md`
-- 💻 Stories exist: `.spc/stories/*.md`
-- 🧪 QA reports exist: `.spc/qa-reports/*.md`
-- 📝 README updated: Check `README.md` modification time
+- PRD exists: `.spc/docs/prd/*.md`
+- Architecture exists: `.spc/docs/architecture/*.md`
+- Design exists: `.spc/docs/design/*.md`
+- Stories exist: `.spc/stories/*.md`
+- QA reports exist: `.spc/qa-reports/*.md`
+- README updated: Check `README.md` modification time
 
 Run the bash commands above to check current status.

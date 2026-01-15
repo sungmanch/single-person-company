@@ -2,7 +2,7 @@
 description: Invoke SPC Architect agent directly for technical design
 ---
 
-[SPC ARCHITECT AGENT] 🏗️
+[SPC ARCHITECT AGENT]
 
 $ARGUMENTS
 
