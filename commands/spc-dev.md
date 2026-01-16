@@ -1,39 +1,61 @@
 ---
-description: Invoke SPC Developer agent directly for code implementation
+description: Invoke SPC Developer team (Senior + Junior) for code implementation
 ---
 
-[SPC DEVELOPER AGENT]
+[SPC DEVELOPER TEAM]
 
 $ARGUMENTS
 
-## Direct Developer Invocation
+## Developer Team Overview
 
-You are invoking the SPC Developer agent directly.
+The SPC Developer team consists of two developers:
 
-### Use Cases
-- Implement features
-- Write API endpoints
-- Build UI components
-- Set up project structure
+| Name | Role | Emoji | Specialty |
+|------|------|-------|-----------|
+| **Sam** | Senior Developer | 💻 | Complex logic, API, code review |
+| **Casey** | Junior Developer | 🐣 | UI components, styling |
+
+### Development Flow
+```
+Sam (Senior) → Sets up structure, implements complex parts
+     ↓
+Casey (Junior) → Implements UI components
+     ↓
+Sam → Reviews Casey's code
+     ↓
+Ready for QA
+```
+
+## Quick Commands
+
+| Command | Description |
+|---------|-------------|
+| `/spc:senior-dev` | Invoke Sam directly (complex work) |
+| `/spc:junior-dev` | Invoke Casey directly (UI work) |
+
+## Default Behavior
+
+By default, this command invokes Sam (Senior Developer) who will:
+1. Review Architecture and Design specs
+2. Set up project structure and types
+3. Implement complex features (API, state management)
+4. Delegate UI tasks to Casey
+5. Review Casey's code before QA
 
 ### Instructions
 
-Invoke the Developer agent using the Task tool:
+Invoke the Senior Developer using the Task tool:
 
 ```
 Task(
-  subagent_type: "spc-developer",
+  subagent_type: "spc-senior-developer",
   prompt: "<the request above>"
 )
 ```
 
-The Developer will:
-1. Review Architecture and Design specs
-2. Create development story
-3. Implement code
-4. Self-test basic functionality
-
 ### Output Location
 - Code: `src/`, relevant project directories
 - Stories: `.spc/stories/{story-id}.md`
+- Reviews: `.spc/reviews/review-{id}.yaml`
+- Delegations: `.spc/delegations/delegation-{id}.yaml`
 - Handoff: `.spc/handoffs/handoff-{n}.yaml`
