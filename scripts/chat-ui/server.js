@@ -330,8 +330,8 @@ export async function startServer(options = {}) {
   // Create HTTP server
   const httpServer = createServer();
 
-  // Create WebSocket server
-  const wss = new WebSocketServer({ server: httpServer });
+  // Create WebSocket server (noServer mode - we handle upgrades manually)
+  const wss = new WebSocketServer({ noServer: true });
 
   wss.on('connection', (ws) => {
     clients.add(ws);
@@ -349,40 +349,64 @@ export async function startServer(options = {}) {
     });
   });
 
-  // Attach Hono to HTTP server
+  // Attach HTTP request handler
   httpServer.on('request', async (req, res) => {
     // Skip WebSocket upgrade requests
     if (req.url === '/ws') return;
 
-    // Collect body for POST requests
-    let body = '';
-    if (req.method === 'POST') {
+    // CORS headers
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    // Handle OPTIONS (CORS preflight)
+    if (req.method === 'OPTIONS') {
+      res.writeHead(204);
+      res.end();
+      return;
+    }
+
+    // Handle API endpoints directly (simpler than routing through Hono)
+    if (req.url === '/api/agents' && req.method === 'GET') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(AGENTS));
+      return;
+    }
+
+    if (req.url === '/api/messages' && req.method === 'GET') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(messageHistory));
+      return;
+    }
+
+    if (req.url === '/api/message' && req.method === 'POST') {
+      let body = '';
       for await (const chunk of req) {
         body += chunk;
       }
+      try {
+        const { text } = JSON.parse(body);
+        const messages = parseMessage(text);
+        messages.forEach(addMessage);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, count: messages.length }));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Invalid JSON', message: e.message }));
+      }
+      return;
     }
 
-    // Handle with Hono
-    const url = new URL(req.url, `http://${req.headers.host}`);
-    const request = new Request(url, {
-      method: req.method,
-      headers: req.headers,
-      body: req.method === 'POST' ? body : undefined,
-    });
-
-    try {
-      const response = await app.fetch(request);
-      const responseHeaders = {};
-      response.headers.forEach((value, key) => {
-        responseHeaders[key] = value;
-      });
-      res.writeHead(response.status, responseHeaders);
-      const responseBody = await response.text();
-      res.end(responseBody);
-    } catch (e) {
-      res.writeHead(500);
-      res.end('Internal Server Error');
+    // Serve main HTML for root
+    if (req.url === '/' && req.method === 'GET') {
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end(getInlineHTML());
+      return;
     }
+
+    // 404 for unknown routes
+    res.writeHead(404);
+    res.end('Not Found');
   });
 
   // Handle WebSocket upgrade
@@ -391,6 +415,8 @@ export async function startServer(options = {}) {
       wss.handleUpgrade(request, socket, head, (ws) => {
         wss.emit('connection', ws, request);
       });
+    } else {
+      socket.destroy();
     }
   });
 
