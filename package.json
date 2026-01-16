@@ -34,6 +34,7 @@
     "README.md",
     "LICENSE"
   ],
+  "type": "module",
   "scripts": {
     "install:local": "./install.sh",
     "uninstall:local": "./uninstall.sh",
@@ -42,10 +43,19 @@
     "test:coverage": "vitest run --coverage",
     "spc:party": "npx claude-flow stream-chain run",
     "spc:party:demo": "npx claude-flow stream-chain demo --verbose",
-    "party:filter": "node scripts/party-filter.js"
+    "party:filter": "node scripts/party-filter.js",
+    "chat-ui": "node scripts/chat-ui/server.js",
+    "chat-ui:dev": "node scripts/chat-ui/server.js --feature 'Development Mode'",
+    "message-bridge": "node scripts/chat-ui/message-bridge.js"
   },
   "dependencies": {
-    "claude-flow": "^2.7.47"
+    "@hono/node-server": "^1.19.9",
+    "claude-flow": "^2.7.47",
+    "hono": "^4.11.4",
+    "htm": "^3.1.1",
+    "open": "^11.0.0",
+    "preact": "^10.28.2",
+    "ws": "^8.19.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.2",

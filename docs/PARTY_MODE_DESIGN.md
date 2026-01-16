@@ -8,7 +8,7 @@ Party Mode transforms SPC from a verbose orchestration tool into a real-time tea
 
 ### Before (Verbose Mode)
 ```
-좋아요! 이제 💻 Sam에게 구현을 맡길 차례에요!
+Great! Now it's time to hand off implementation to 💻 Sam!
 
 Task:Sam: Implement the app
 IN
@@ -29,23 +29,23 @@ import { useState }...
 
 ### After (Party Mode)
 ```
-📐 Jamie: PRD 확인! API는 timedtext 엔드포인트로 갈게요
-🎨 Morgan: @Jamie 👍 CORS 이슈 있나요?
-📐 Jamie: @Morgan 네, proxy 필요해요
-🎨 Morgan: 로딩 상태 FAB에 추가할게요
-📐 Jamie: 아키텍처 완료! → .spc/docs/architecture/
-🎨 Morgan: 디자인 완료! 초록색 FAB가 핵심이에요
-💻 Sam: 스펙 봤어요! 깔끔하네요 👏
-💻 Sam: 프로젝트 세팅 중...
-💻 Sam: hooks 작업 중... useYouTubePlayer ✅
-💻 Sam: 컴포넌트 작업 중...
-💻 Sam: 빌드 성공! 🎉
-🧪 Taylor: @Sam 코드 리뷰 시작할게요
-🧪 Taylor: 빌드 통과 ✅ 테스트 시작
-📝 Riley: README 작성 중...
-🧪 Taylor: QA 완료! APPROVED ✅
-📝 Riley: 문서 완료!
-🧑‍💼 Alex: 팀 수고했어요! 🎉
+📐 Jamie: PRD checked! Going with timedtext endpoint for API
+🎨 Morgan: @Jamie 👍 Any CORS issues?
+📐 Jamie: @Morgan Yes, need a proxy
+🎨 Morgan: Adding loading state to FAB
+📐 Jamie: Architecture complete! → .spc/docs/architecture/
+🎨 Morgan: Design complete! Green FAB is the key
+💻 Sam: Checked the specs! Looking clean 👏
+💻 Sam: Setting up project...
+💻 Sam: Working on hooks... useYouTubePlayer ✅
+💻 Sam: Working on components...
+💻 Sam: Build successful! 🎉
+🧪 Taylor: @Sam Starting code review
+🧪 Taylor: Build passed ✅ Starting tests
+📝 Riley: Writing README...
+🧪 Taylor: QA complete! APPROVED ✅
+📝 Riley: Documentation complete!
+🧑‍💼 Alex: Great work team! 🎉
 ```
 
 ## Key Changes
@@ -65,30 +65,30 @@ import { useState }...
 
 Examples:
 ```
-📐 Jamie: 아키텍처 설계 시작!
-📐 Jamie: @Morgan YouTube iframe은 16:9 비율 필수에요
-🎨 Morgan: @Jamie 알겠어요, aspect-ratio 적용할게요
-💻 Sam: useSubtitles hook 완성 ✅
-🧪 Taylor: 빌드 통과! 테스트 돌리는 중...
+📐 Jamie: Starting architecture design!
+📐 Jamie: @Morgan YouTube iframe needs 16:9 aspect ratio
+🎨 Morgan: @Jamie Got it, will apply aspect-ratio
+💻 Sam: useSubtitles hook complete ✅
+🧪 Taylor: Build passed! Running tests...
 ```
 
 ### 3. Interaction Patterns
 
 **Direct mentions:** `@Name` for targeted messages
 ```
-🎨 Morgan: @Jamie 자막 로딩 딜레이 얼마나 되나요?
-📐 Jamie: @Morgan 100-500ms 정도요
+🎨 Morgan: @Jamie How much delay for subtitle loading?
+📐 Jamie: @Morgan About 100-500ms
 ```
 
 **Status indicators:**
-- ✅ = 완료
-- 🔄 = 진행중
-- ❌ = 문제발생
-- 👏 = 칭찬
+- ✅ = Complete
+- 🔄 = In progress
+- ❌ = Problem occurred
+- 👏 = Praise
 
 **Short completions:**
 ```
-📐 Jamie: 아키텍처 완료! → .spc/docs/architecture/feature.md
+📐 Jamie: Architecture complete! → .spc/docs/architecture/feature.md
 ```
 
 ### 4. PM (Alex) Streaming Behavior
@@ -114,34 +114,34 @@ while not all_complete:
 
 #### Starting Work
 ```
-📐 Jamie: PRD 읽는 중...
-📐 Jamie: 아키텍처 설계 시작!
+📐 Jamie: Reading PRD...
+📐 Jamie: Starting architecture design!
 ```
 
 #### Progress Updates (every 15-30 sec)
 ```
-📐 Jamie: YouTube API 옵션 분석 중...
-📐 Jamie: timedtext 엔드포인트로 결정!
-📐 Jamie: 컴포넌트 구조 설계 중...
+📐 Jamie: Analyzing YouTube API options...
+📐 Jamie: Decided on timedtext endpoint!
+📐 Jamie: Designing component structure...
 ```
 
 #### Questions & Answers
 ```
-🎨 Morgan: @Jamie CORS 어떻게 처리하나요?
-📐 Jamie: @Morgan proxy 사용할 거예요
-🎨 Morgan: 👍 로딩 상태 추가할게요
+🎨 Morgan: @Jamie How do we handle CORS?
+📐 Jamie: @Morgan We'll use a proxy
+🎨 Morgan: 👍 Will add loading state
 ```
 
 #### Completions
 ```
-📐 Jamie: 아키텍처 완료! ✅
-📐 Jamie: @Sam TypeScript 인터페이스 다 정의해뒀어요
+📐 Jamie: Architecture complete! ✅
+📐 Jamie: @Sam TypeScript interfaces are all defined
 ```
 
 #### Reactions & Acknowledgments
 ```
-💻 Sam: @Jamie @Morgan 스펙 깔끔하네요! 👏
-🧪 Taylor: @Sam 코드 잘 짰어요!
+💻 Sam: @Jamie @Morgan Specs look clean! 👏
+🧪 Taylor: @Sam Nice code!
 ```
 
 ## Implementation Changes
@@ -164,7 +164,7 @@ while not all_complete:
 Use these short formats when posting to conversation log:
 
 ### Starting
-{emoji} {name}: {task} 시작!
+{emoji} {name}: Starting {task}!
 
 ### Progress (every 15-30 sec)
 {emoji} {name}: {what_doing}...
@@ -177,7 +177,7 @@ Use these short formats when posting to conversation log:
 {emoji} {name}: @{asker} {short_answer}
 
 ### Completion
-{emoji} {name}: {task} 완료! ✅
+{emoji} {name}: {task} complete! ✅
 {emoji} {name}: → {artifact_path}
 
 ### Reactions
