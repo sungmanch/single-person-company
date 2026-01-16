@@ -1,6 +1,6 @@
 # Execution Logic Comparison: Our Sisyphus vs oh-my-opencode
 
-> **실제 실행 로직** 상세 비교 - 커맨드를 입력했을 때 내부적으로 무슨 일이 일어나는가?
+> **Detailed actual execution logic comparison** - What happens internally when you enter a command?
 
 **Research Date:** 2026-01-15
 
@@ -8,15 +8,15 @@
 
 ## Executive Summary
 
-같은 커맨드를 사용하지만, **내부 동작 메커니즘은 완전히 다릅니다**:
-- **우리:** Markdown 프롬프트 주입 → Claude가 해석 → Task tool로 순차 실행
-- **그들:** TypeScript 함수 실행 → sisyphus_task로 카테고리 분류 → 병렬 오케스트레이션
+We use the same commands, but **the internal execution mechanisms are completely different**:
+- **Us:** Markdown prompt injection → Claude interprets → Sequential execution with Task tool
+- **Them:** TypeScript function execution → Category classification with sisyphus_task → Parallel orchestration
 
 ---
 
-## 1. 커맨드 실행: `/sisyphus "Fix auth bug"`
+## 1. Command Execution: `/sisyphus "Fix auth bug"`
 
-### 우리의 실행 로직 (Claude Code Plugin)
+### Our Execution Logic (Claude Code Plugin)
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -42,7 +42,7 @@
 │                                                         │
 │ [SISYPHUS MODE ACTIVATED]                              │
 │                                                         │
-│ $ARGUMENTS  ← "Fix auth bug" 삽입                      │
+│ $ARGUMENTS  ← "Fix auth bug" inserted                  │
 │                                                         │
 │ ## Orchestration Instructions                          │
 │ You are now operating as Sisyphus...                   │
@@ -236,7 +236,7 @@
 
 ---
 
-### oh-my-opencode의 실행 로직 (TypeScript Platform)
+### oh-my-opencode's Execution Logic (TypeScript Platform)
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -649,9 +649,9 @@
 
 ---
 
-## 2. 커맨드 실행: `/ultrawork "Refactor entire API"`
+## 2. Command Execution: `/ultrawork "Refactor entire API"`
 
-### 우리의 `/ultrawork` 로직
+### Our `/ultrawork` Logic
 
 ```
 ┌──────────────────────────────────────────┐
@@ -733,13 +733,13 @@
 └──────────────────────────────────────────┘
 ```
 
-**특징:**
-- `run_in_background: true` **수동 설정**
-- TaskOutput으로 **수동 결과 수집**
-- 병렬화는 **개발자 판단**
-- 여전히 순차 실행이 섞임
+**Characteristics:**
+- `run_in_background: true` **manual setting**
+- **Manual result collection** with TaskOutput
+- Parallelization is **developer's judgment**
+- Sequential execution still mixed in
 
-### oh-my-opencode의 "ultrawork" 키워드 로직
+### oh-my-opencode's "ultrawork" Keyword Logic
 
 ```
 ┌──────────────────────────────────────────┐
@@ -844,17 +844,17 @@
 └──────────────────────────────────────────┘
 ```
 
-**특징:**
-- **자동 병렬화** (수동 플래그 불필요)
-- **8+ 에이전트 동시 실행**
-- **자동 결과 수집**
-- **더 빠른 완료** (~40% 시간 절약)
+**Characteristics:**
+- **Automatic parallelization** (no manual flags needed)
+- **8+ agents running simultaneously**
+- **Automatic result collection**
+- **Faster completion** (~40% time savings)
 
 ---
 
-## 3. 에이전트 호출: `frontend-engineer`
+## 3. Agent Invocation: `frontend-engineer`
 
-### 우리의 frontend-engineer 호출
+### Our frontend-engineer Invocation
 
 ```
 ┌──────────────────────────────────────────┐
@@ -942,14 +942,14 @@
 └──────────────────────────────────────────┘
 ```
 
-**특징:**
+**Characteristics:**
 - ✅ Simple agent definition (markdown)
 - ✅ Clean isolation (no context leak)
 - ❌ No context preservation
 - ❌ Fresh start every invocation
 - ❌ Cannot resume work
 
-### oh-my-opencode의 frontend-engineer 호출
+### oh-my-opencode's frontend-engineer Invocation
 
 ```
 ┌──────────────────────────────────────────┐
@@ -1074,7 +1074,7 @@
 └──────────────────────────────────────────┘
 ```
 
-**특징:**
+**Characteristics:**
 - ✅ Advanced tools (LSP, AST-Grep, look_at)
 - ✅ Hook system (validation + accessibility check)
 - ✅ Context preservation (resume capability)
@@ -1084,42 +1084,42 @@
 
 ---
 
-## 4. 핵심 차이점 요약
+## 4. Key Differences Summary
 
-### 커맨드 실행 메커니즘
+### Command Execution Mechanism
 
 | Aspect | Our Implementation | oh-my-opencode |
 |--------|-------------------|----------------|
-| **커맨드 파싱** | Claude Code CLI reads .md | TypeScript function call |
-| **프롬프트 생성** | Static markdown (~40 lines) | Dynamic TypeScript (504 lines) |
-| **모델 선택** | Fixed (Sonnet for main) | Dynamic (Opus + extended thinking) |
-| **분류 시스템** | Claude interprets prompt | TypeScript classification function |
+| **Command Parsing** | Claude Code CLI reads .md | TypeScript function call |
+| **Prompt Generation** | Static markdown (~40 lines) | Dynamic TypeScript (504 lines) |
+| **Model Selection** | Fixed (Sonnet for main) | Dynamic (Opus + extended thinking) |
+| **Classification System** | Claude interprets prompt | TypeScript classification function |
 | **Pre-delegation** | None | Mandatory declaration protocol |
 
-### 에이전트 델리게이션
+### Agent Delegation
 
 | Aspect | Our Implementation | oh-my-opencode |
 |--------|-------------------|----------------|
-| **델리게이션 도구** | Generic `Task` tool | Specialized `sisyphus_task` |
-| **병렬 실행** | Manual `run_in_background: true` | Automatic parallel orchestration |
-| **결과 수집** | Manual `TaskOutput(task_id)` | Automatic `background_output()` |
-| **에이전트 로딩** | Read markdown → inject | Load TypeScript config → spawn |
-| **컨텍스트 보존** | None (fresh every time) | Session-based resume |
-| **결과 형식** | String (text response) | Structured object |
+| **Delegation Tool** | Generic `Task` tool | Specialized `sisyphus_task` |
+| **Parallel Execution** | Manual `run_in_background: true` | Automatic parallel orchestration |
+| **Result Collection** | Manual `TaskOutput(task_id)` | Automatic `background_output()` |
+| **Agent Loading** | Read markdown → inject | Load TypeScript config → spawn |
+| **Context Preservation** | None (fresh every time) | Session-based resume |
+| **Result Format** | String (text response) | Structured object |
 
-### 에이전트 실행
+### Agent Execution
 
 | Aspect | Our Implementation | oh-my-opencode |
 |--------|-------------------|----------------|
-| **모델 선택** | Fixed in markdown | Dynamic by task type |
+| **Model Selection** | Fixed in markdown | Dynamic by task type |
 | **Temperature** | Model default | Enforced per agent (≤0.3) |
-| **도구 접근** | Standard tools only | LSP + AST-Grep + custom |
-| **Hook 시스템** | None | PreToolUse/PostToolUse/Stop |
-| **컨텍스트 주입** | Manual file reading | Smart `look_at` tool |
+| **Tool Access** | Standard tools only | LSP + AST-Grep + custom |
+| **Hook System** | None | PreToolUse/PostToolUse/Stop |
+| **Context Injection** | Manual file reading | Smart `look_at` tool |
 | **Extended Thinking** | Basic (if using Opus) | 32k token budget |
-| **세션 관리** | Stateless | Persistent with resume |
+| **Session Management** | Stateless | Persistent with resume |
 
-### 실행 플로우
+### Execution Flow
 
 | Phase | Our Implementation | oh-my-opencode |
 |-------|-------------------|----------------|
@@ -1132,21 +1132,21 @@
 | **6. Verification** | Todo checklist | LSP diagnostics + tests |
 | **7. Cleanup** | None | Stop hook (cancel tasks, save session) |
 
-### 성능 비교
+### Performance Comparison
 
 | Metric | Our Implementation | oh-my-opencode |
 |--------|-------------------|----------------|
-| **평균 실행 시간** | 2-3 minutes | 1.5-2 minutes (병렬화로 40% 빠름) |
-| **병렬 작업 수** | 0-2 (manual) | 3-8+ (automatic) |
-| **API 호출 수** | 2-4 agents | 5-10 agents (병렬 실행) |
-| **컨텍스트 사용** | 높음 (반복 읽기) | 낮음 (look_at으로 최적화) |
-| **토큰 비용** | 중간 | 높음 (더 많은 에이전트) |
+| **Average Execution Time** | 2-3 minutes | 1.5-2 minutes (40% faster with parallelization) |
+| **Parallel Tasks** | 0-2 (manual) | 3-8+ (automatic) |
+| **API Calls** | 2-4 agents | 5-10 agents (parallel execution) |
+| **Context Usage** | High (repeated reading) | Low (optimized with look_at) |
+| **Token Cost** | Medium | High (more agents) |
 
 ---
 
-## 5. 실제 동작 예시: `/sisyphus "Add dark mode"`
+## 5. Real Execution Example: `/sisyphus "Add dark mode"`
 
-### 우리의 실행 (단계별)
+### Our Execution (Step by Step)
 
 ```bash
 User: /sisyphus "Add dark mode"
@@ -1189,13 +1189,13 @@ User: /sisyphus "Add dark mode"
 Total time: 1 minute 56 seconds
 ```
 
-**특징:**
+**Characteristics:**
 - ⏱️ Sequential execution (one agent waits for another)
 - 📊 Clear progress (todo checklist)
 - 🔍 Transparent (user sees each step)
 - ⏳ Slower (sequential bottleneck)
 
-### oh-my-opencode의 실행 (병렬 + 최적화)
+### oh-my-opencode's Execution (Parallel + Optimized)
 
 ```bash
 User: omo "Add dark mode"
@@ -1246,7 +1246,7 @@ User: omo "Add dark mode"
 Total time: 44 seconds
 ```
 
-**특징:**
+**Characteristics:**
 - ⚡ Parallel execution (4 agents running simultaneously)
 - 🚀 62% faster (44 sec vs 1m56s)
 - 🤖 Multi-model (Grok + GLM + Gemini + Claude)
@@ -1256,11 +1256,11 @@ Total time: 44 seconds
 
 ---
 
-## 6. 결론: 동작 로직의 근본적 차이
+## 6. Conclusion: Fundamental Differences in Execution Logic
 
-### 우리의 접근 (Markdown + Sequential)
+### Our Approach (Markdown + Sequential)
 
-**메커니즘:**
+**Mechanism:**
 ```
 User Input
   → Claude Code CLI
@@ -1273,15 +1273,15 @@ User Input
   → Continue
 ```
 
-**철학:** "간단하고 투명하게"
-- Markdown = 사람이 읽기 쉬움
-- Sequential = 예측 가능
-- Explicit = 명확한 제어
-- Simple = 배우기 쉬움
+**Philosophy:** "Simple and Transparent"
+- Markdown = Human-readable
+- Sequential = Predictable
+- Explicit = Clear control
+- Simple = Easy to learn
 
-### oh-my-opencode의 접근 (TypeScript + Parallel)
+### oh-my-opencode's Approach (TypeScript + Parallel)
 
-**메커니즘:**
+**Mechanism:**
 ```
 User Input
   → OpenCode CLI
@@ -1295,50 +1295,50 @@ User Input
   → Phase 7: Stop hook (cleanup + save)
 ```
 
-**철학:** "최대 성능과 지능"
-- TypeScript = 프로그래밍 가능
-- Parallel = 최대 속도
-- Automatic = 최적화된 실행
-- Advanced = 고급 기능
+**Philosophy:** "Maximum Performance and Intelligence"
+- TypeScript = Programmable
+- Parallel = Maximum speed
+- Automatic = Optimized execution
+- Advanced = Advanced features
 
-### 비유로 이해하기
+### Understanding Through Analogy
 
-**우리 시스템:**
+**Our System:**
 ```
-레스토랑 주방 - 전통 방식
-├─ 셰프 (Sisyphus): "음식 만들어"
-├─ 조리사 1: 재료 준비 → 완료 후 보고
-├─ 셰프: 조리사 1 결과 확인
-├─ 조리사 2: 요리 시작 → 완료 후 보고
-├─ 셰프: 조리사 2 결과 확인
-└─ 서빙
+Restaurant Kitchen - Traditional Style
+├─ Chef (Sisyphus): "Make the food"
+├─ Cook 1: Prep ingredients → Report when done
+├─ Chef: Check Cook 1's results
+├─ Cook 2: Start cooking → Report when done
+├─ Chef: Check Cook 2's results
+└─ Serve
 ```
-- 한 명씩 순서대로
-- 각 단계마다 보고
-- 투명하고 명확
-- 하지만 느림
+- One person at a time in order
+- Report at each step
+- Transparent and clear
+- But slower
 
-**oh-my-opencode 시스템:**
+**oh-my-opencode System:**
 ```
-대형 레스토랑 - 산업화 방식
-├─ 헤드 셰프 (Sisyphus): "음식 10개 준비"
-│   ├─ 분석: 어떤 조리사에게 무엇을?
-│   ├─ 전략: 병렬로 어떻게?
-│   └─ 델리게이션: 7개 스테이션 동시 가동
-├─ 스테이션 1 (재료 준비): 2명 병렬
-├─ 스테이션 2 (조리): 3명 병렬
-├─ 스테이션 3 (플레이팅): 1명
-├─ 스테이션 4 (품질 검사): 자동
-└─ 동시에 모든 결과 취합
+Large Restaurant - Industrial Style
+├─ Head Chef (Sisyphus): "Prepare 10 dishes"
+│   ├─ Analysis: Who cooks what?
+│   ├─ Strategy: How to parallelize?
+│   └─ Delegation: 7 stations running simultaneously
+├─ Station 1 (Prep): 2 cooks in parallel
+├─ Station 2 (Cooking): 3 cooks in parallel
+├─ Station 3 (Plating): 1 cook
+├─ Station 4 (Quality Check): Automated
+└─ Collect all results simultaneously
 ```
-- 여러 명이 동시에
-- 자동 조율 및 취합
-- 복잡하지만 빠름
-- 전문화된 역할
+- Multiple people at once
+- Automatic coordination and aggregation
+- Complex but fast
+- Specialized roles
 
 ---
 
-## 요약: 같은 커맨드, 완전히 다른 실행
+## Summary: Same Command, Completely Different Execution
 
 | | Our Sisyphus | oh-my-opencode |
 |---|---|---|
@@ -1355,12 +1355,12 @@ User Input
 | **Complexity** | Low (simple) | High (advanced) |
 | **Power** | Limited | Maximum |
 
-**핵심 차이:**
-- 우리는 **사람이 제어**, 그들은 **기계가 최적화**
-- 우리는 **투명성 우선**, 그들은 **성능 우선**
-- 우리는 **단순 명확**, 그들은 **복잡 강력**
+**Key Differences:**
+- We prioritize **human control**, they prioritize **machine optimization**
+- We prioritize **transparency**, they prioritize **performance**
+- We are **simple and clear**, they are **complex but powerful**
 
-두 시스템 모두 "Sisyphus" 철학을 공유하지만, **구현 방식은 정반대**입니다.
+Both systems share the "Sisyphus" philosophy, but **the implementation approaches are opposite**.
 
 ---
 
