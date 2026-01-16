@@ -1076,10 +1076,11 @@ export async function startServer(options = {}) {
     }
 
     if (req.url === '/api/message' && req.method === 'POST') {
-      let body = '';
+      const chunks = [];
       for await (const chunk of req) {
-        body += chunk;
+        chunks.push(chunk);
       }
+      const body = Buffer.concat(chunks).toString('utf-8');
       try {
         const { text } = JSON.parse(body);
         const messages = parseMessage(text);
