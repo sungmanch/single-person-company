@@ -2,7 +2,14 @@
   "name": "spc-ai-team",
   "version": "1.0.0",
   "description": "SPC AI Team - Claude Code Plugin for Solo Founders",
-  "keywords": ["ai", "agents", "claude-code", "plugin", "cli", "automation"],
+  "keywords": [
+    "ai",
+    "agents",
+    "claude-code",
+    "plugin",
+    "cli",
+    "automation"
+  ],
   "author": "Sungman Cho",
   "license": "MIT",
   "repository": {
@@ -21,6 +28,8 @@
     "commands/",
     "agents/",
     "protocols/",
+    "workflows/",
+    "scripts/",
     "spc-claude.md",
     "README.md",
     "LICENSE"
@@ -30,7 +39,13 @@
     "uninstall:local": "./uninstall.sh",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "spc:party": "npx claude-flow stream-chain run",
+    "spc:party:demo": "npx claude-flow stream-chain demo --verbose",
+    "party:filter": "node scripts/party-filter.js"
+  },
+  "dependencies": {
+    "claude-flow": "^2.7.47"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.2",
