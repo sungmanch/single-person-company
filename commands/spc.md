@@ -6,6 +6,79 @@ description: Activate SPC (Single Person Company) AI Team for full collaboration
 
 $ARGUMENTS
 
+---
+
+## Chat UI Mode (NEW!)
+
+SPC now supports a **Slack-like web UI** that displays agent conversations in real-time!
+
+### How It Works
+
+When you start SPC, the Chat UI automatically:
+1. 🚀 Starts a local server (localhost:3847)
+2. 🌐 Opens your browser with the chat interface
+3. 💬 Streams all agent messages to the UI in real-time
+4. 🛑 Shuts down when work is complete
+
+### Enabling Chat UI
+
+**As the PM (Alex), at the START of every /spc session:**
+
+1. First, start the Chat UI server:
+```javascript
+// Use Bash to start the Chat UI in background
+Bash({
+  command: "node scripts/spc-with-ui.js --feature '$ARGUMENTS'",
+  run_in_background: true,
+  description: "Start Chat UI server"
+})
+```
+
+2. Wait for server to be ready (check output for "Chat UI running")
+
+3. All your party mode messages will now appear in both:
+   - Terminal (as usual)
+   - Browser Chat UI (Slack-like interface)
+
+### Sending Messages to Chat UI
+
+When posting party mode messages, also send them to the Chat UI:
+```bash
+# Example: After outputting "📐 Jamie: 아키텍처 시작!"
+curl -X POST http://localhost:3847/api/message \
+  -H "Content-Type: application/json" \
+  -d '{"text": "📐 Jamie: 아키텍처 시작!"}'
+```
+
+Or use the message bridge for streaming:
+```bash
+claude -p --output-format stream-json "task" | node scripts/chat-ui/message-bridge.js
+```
+
+### Chat UI Architecture
+
+```
+┌────────────────────────────────┐
+│  /spc "feature" 실행           │
+└───────────┬────────────────────┘
+            │
+            ▼
+┌────────────────────────────────┐
+│  Chat UI Server (auto-start)   │
+│  - Hono + WebSocket            │
+│  - localhost:3847              │
+└───────────┬────────────────────┘
+            │ WebSocket
+            ▼
+┌────────────────────────────────┐
+│  Browser (auto-open)           │
+│  - Slack-like chat interface   │
+│  - Real-time message display   │
+└────────────────────────────────┘
+```
+
+---
+
 ## Party Mode (Default)
 
 You are operating in **Party Mode** - a clean, chat-like output mode where users see only agent conversations, not tool invocations.
