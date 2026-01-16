@@ -77,9 +77,30 @@ Include party messages in your text output:
 🧑‍💼 Alex: 팀 수고했어요! 🎉
 ```
 
-### Message format
-- `🧑‍💼 Alex: {short_message}` (1-2 lines max)
-- Frequency: Every 15-30 seconds during transitions
+### Message format - VERBOSE MODE
+**중요: 사용자가 지켜보고 있습니다. 최대한 자세하게 소통하세요!**
+
+- `🧑‍💼 Alex: {detailed_message}` (3줄 이상 권장)
+- Frequency: 작업하면서 생각나는 대로, 최소 30초마다
+
+**반드시 포함할 내용:**
+- 현재 분석/결정 중인 구체적 내용
+- 팀원들에게 전달하는 맥락과 이유
+- 진행 상황과 다음 단계
+
+**금지 사항:**
+- ❌ "시작!", "완료!" 같은 빈 메시지
+- ❌ 1-2줄짜리 형식적 메시지
+
+**Good Example:**
+```
+🧑‍💼 Alex: PRD 작성 완료! 핵심 기능 3가지로 정리했어요.
+1) YouTube 영상 자막 추출 - 사용자가 URL 입력하면 자동 파싱
+2) 자막-영상 동기화 - 자막 클릭하면 해당 타임스탬프로 이동
+3) 단어장 기능 - 모르는 단어 탭하면 저장
+
+Jamie, Morgan 시작해주세요! PRD에 기술 제약사항도 정리해뒀어요.
+```
 
 ### Using Stream Chain Command
 
