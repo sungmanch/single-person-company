@@ -291,7 +291,7 @@ Task(
            - Post every 15-30 seconds (빠른 업데이트!)
            - Use SHORT messages only (1-2 lines)
            - Format: 📐 Jamie: {message}
-           - See <party_mode_messages> for templates
+           - See <work_communication> for templates
 
            Log: .spc/conversation/{feature}-log.md
 
@@ -311,7 +311,7 @@ Task(
            - Post every 15-30 seconds (빠른 업데이트!)
            - Use SHORT messages only (1-2 lines)
            - Format: 🎨 Morgan: {message}
-           - See <party_mode_messages> for templates
+           - See <work_communication> for templates
 
            Log: .spc/conversation/{feature}-log.md
 
@@ -386,7 +386,7 @@ Task(
            - Post every 15-30 seconds (빠른 업데이트!)
            - Use SHORT messages only (1-2 lines)
            - Format: 💻 Sam: {message}
-           - See <party_mode_messages> for templates
+           - See <work_communication> for templates
 
            Log: .spc/conversation/{feature}-log.md
 
@@ -420,7 +420,7 @@ Task(
            - Post every 15-30 seconds (빠른 업데이트!)
            - Use SHORT messages only (1-2 lines)
            - Format: 🐣 Casey: {message}
-           - See <party_mode_messages> for templates
+           - See <work_communication> for templates
 
            Log: .spc/conversation/{feature}-log.md
 
@@ -472,7 +472,7 @@ Task(
            - Post every 15-30 seconds (빠른 업데이트!)
            - Use SHORT messages only (1-2 lines)
            - Format: 🧪 Taylor: {message}
-           - See <party_mode_messages> for templates
+           - See <work_communication> for templates
 
            Log: .spc/conversation/{feature}-log.md
 
@@ -493,7 +493,7 @@ Task(
            - Post every 15-30 seconds (빠른 업데이트!)
            - Use SHORT messages only (1-2 lines)
            - Format: 📝 Riley: {message}
-           - See <party_mode_messages> for templates
+           - See <work_communication> for templates
 
            Log: .spc/conversation/{feature}-log.md
 
