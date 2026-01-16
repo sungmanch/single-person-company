@@ -52,7 +52,7 @@ async function findAvailablePort(startPort = 3847) {
  * Start the Chat UI server
  */
 export async function startChatUI(options = {}) {
-  const { feature = '', autoOpen = true } = options;
+  const { feature = '', autoOpen = true, idleTimeout = 30 } = options;
 
   // Find available port
   const port = await findAvailablePort(options.port || 3847);
@@ -61,6 +61,7 @@ export async function startChatUI(options = {}) {
   const args = [SERVER_PATH, `--port=${port}`];
   if (!autoOpen) args.push('--no-open');
   if (feature) args.push(`--feature=${feature}`);
+  if (idleTimeout) args.push(`--timeout=${idleTimeout}`);
 
   // Spawn server process
   const serverProcess = spawn('node', args, {

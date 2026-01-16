@@ -43,6 +43,63 @@ const clients = new Set();
 const messageHistory = [];
 const MAX_HISTORY = 100;
 
+// Activity tracking for auto-shutdown
+let lastActivityTime = Date.now();
+const DEFAULT_IDLE_TIMEOUT = 30 * 60 * 1000; // 30 minutes default
+let idleTimeout = DEFAULT_IDLE_TIMEOUT;
+let idleCheckInterval = null;
+let serverInstance = null;
+let wssInstance = null;
+
+/**
+ * Update last activity timestamp
+ */
+function updateActivity() {
+  lastActivityTime = Date.now();
+}
+
+/**
+ * Get remaining time before auto-shutdown (in seconds)
+ */
+function getRemainingTime() {
+  const elapsed = Date.now() - lastActivityTime;
+  const remaining = Math.max(0, idleTimeout - elapsed);
+  return Math.ceil(remaining / 1000);
+}
+
+/**
+ * Graceful shutdown
+ */
+function shutdown(reason = 'manual') {
+  console.log(`\n🛑 Shutting down Chat UI (${reason})...`);
+
+  // Notify all clients
+  broadcast({ type: 'shutdown', reason });
+
+  // Clear interval
+  if (idleCheckInterval) {
+    clearInterval(idleCheckInterval);
+    idleCheckInterval = null;
+  }
+
+  // Close WebSocket connections
+  clients.forEach(client => {
+    try { client.close(); } catch (e) {}
+  });
+  clients.clear();
+
+  // Close servers
+  if (wssInstance) {
+    try { wssInstance.close(); } catch (e) {}
+  }
+  if (serverInstance) {
+    try { serverInstance.close(); } catch (e) {}
+  }
+
+  // Exit process
+  setTimeout(() => process.exit(0), 500);
+}
+
 /**
  * Parse a party mode message
  */
@@ -85,6 +142,7 @@ function broadcast(data) {
  * Add message to history and broadcast
  */
 function addMessage(msg) {
+  updateActivity(); // Reset idle timer on new message
   messageHistory.push(msg);
   if (messageHistory.length > MAX_HISTORY) {
     messageHistory.shift();
@@ -146,7 +204,36 @@ function getInlineHTML() {
       gap: 12px;
     }
     header h1 { font-size: 18px; font-weight: 600; }
-    header .feature { color: #888; font-size: 14px; }
+    header .feature { color: #888; font-size: 14px; flex: 1; }
+    header .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .idle-timer {
+      font-size: 12px;
+      color: #666;
+      padding: 4px 8px;
+      background: #0f3460;
+      border-radius: 4px;
+    }
+    .idle-timer.warning { color: #F59E0B; }
+    .idle-timer.critical { color: #EF4444; }
+    .shutdown-btn {
+      background: #EF4444;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .shutdown-btn:hover { background: #DC2626; }
+    .shutdown-btn:disabled {
+      background: #666;
+      cursor: not-allowed;
+    }
     .chat-container {
       flex: 1;
       overflow-y: auto;
@@ -223,6 +310,10 @@ function getInlineHTML() {
       margin: 0 auto 16px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
   </style>
 </head>
 <body>
@@ -230,6 +321,10 @@ function getInlineHTML() {
     <span style="font-size: 24px;">🏢</span>
     <h1>SPC Team Chat</h1>
     <span class="feature" id="feature-name"></span>
+    <div class="header-right">
+      <span class="idle-timer" id="idle-timer" title="Auto-shutdown timer">--:--</span>
+      <button class="shutdown-btn" id="shutdown-btn" title="Stop server">종료</button>
+    </div>
   </header>
 
   <div class="chat-container" id="chat">
@@ -246,6 +341,52 @@ function getInlineHTML() {
     const chatEl = document.getElementById('chat');
     const agentsBar = document.getElementById('agents-bar');
     const featureEl = document.getElementById('feature-name');
+    const idleTimerEl = document.getElementById('idle-timer');
+    const shutdownBtn = document.getElementById('shutdown-btn');
+
+    let remainingSeconds = ${idleTimeout / 1000};
+    let timerInterval = null;
+
+    // Update idle timer display
+    function updateTimerDisplay() {
+      const mins = Math.floor(remainingSeconds / 60);
+      const secs = remainingSeconds % 60;
+      idleTimerEl.textContent = mins.toString().padStart(2, '0') + ':' + secs.toString().padStart(2, '0');
+
+      // Update color based on remaining time
+      idleTimerEl.classList.remove('warning', 'critical');
+      if (remainingSeconds <= 60) {
+        idleTimerEl.classList.add('critical');
+      } else if (remainingSeconds <= 300) {
+        idleTimerEl.classList.add('warning');
+      }
+    }
+
+    // Start countdown timer
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        remainingSeconds = Math.max(0, remainingSeconds - 1);
+        updateTimerDisplay();
+      }, 1000);
+      updateTimerDisplay();
+    }
+
+    // Handle shutdown button
+    shutdownBtn.addEventListener('click', async () => {
+      if (!confirm('서버를 종료하시겠습니까?')) return;
+
+      shutdownBtn.disabled = true;
+      shutdownBtn.textContent = '종료 중...';
+
+      try {
+        await fetch('/api/shutdown', { method: 'POST' });
+      } catch (e) {
+        // Server might already be closed
+      }
+    });
+
+    startTimer();
 
     // Render agents bar
     Object.entries(AGENTS).forEach(([name, info]) => {
@@ -269,16 +410,45 @@ function getInlineHTML() {
       const { type, data } = JSON.parse(event.data);
       if (type === 'message') {
         addMessage(data);
+        // Reset timer on new message
+        remainingSeconds = ${idleTimeout / 1000};
+        updateTimerDisplay();
       } else if (type === 'history') {
         chatEl.innerHTML = '';
         data.forEach(addMessage);
       } else if (type === 'feature') {
         featureEl.textContent = '- ' + data;
+      } else if (type === 'shutdown') {
+        // Server is shutting down
+        if (timerInterval) clearInterval(timerInterval);
+        idleTimerEl.textContent = '종료됨';
+        idleTimerEl.classList.add('critical');
+        shutdownBtn.disabled = true;
+        shutdownBtn.textContent = '종료됨';
+        chatEl.innerHTML += '<p style="text-align:center;color:#EF4444;padding:20px;font-weight:bold;">🛑 서버가 종료되었습니다. (' + data + ')</p>';
+      } else if (type === 'timer_reset') {
+        // Timer was reset by activity
+        remainingSeconds = data;
+        updateTimerDisplay();
+      } else if (type === 'timer_warning') {
+        // Warning when close to shutdown
+        remainingSeconds = data;
+        updateTimerDisplay();
+        if (data <= 30 && !document.getElementById('shutdown-warning')) {
+          const warning = document.createElement('div');
+          warning.id = 'shutdown-warning';
+          warning.style.cssText = 'position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#EF4444;color:white;padding:12px 24px;border-radius:8px;font-weight:bold;z-index:1000;animation:pulse 1s infinite;';
+          warning.textContent = '⚠️ ' + data + '초 후 서버가 자동 종료됩니다!';
+          document.body.appendChild(warning);
+        }
       }
     };
 
     ws.onclose = () => {
-      chatEl.innerHTML += '<p style="text-align:center;color:#F59E0B;padding:20px;">Connection closed. Refresh to reconnect.</p>';
+      if (timerInterval) clearInterval(timerInterval);
+      idleTimerEl.textContent = '연결 끊김';
+      shutdownBtn.disabled = true;
+      chatEl.innerHTML += '<p style="text-align:center;color:#F59E0B;padding:20px;">연결이 종료되었습니다. 새로고침하여 재연결하세요.</p>';
     };
 
     function addMessage(msg) {
@@ -327,14 +497,21 @@ export async function startServer(options = {}) {
   const autoOpen = options.autoOpen !== false;
   const featureName = options.feature || '';
 
+  // Set idle timeout (default: 30 minutes)
+  idleTimeout = (options.idleTimeout || 30) * 60 * 1000;
+  lastActivityTime = Date.now();
+
   // Create HTTP server
   const httpServer = createServer();
+  serverInstance = httpServer;
 
   // Create WebSocket server (noServer mode - we handle upgrades manually)
   const wss = new WebSocketServer({ noServer: true });
+  wssInstance = wss;
 
   wss.on('connection', (ws) => {
     clients.add(ws);
+    updateActivity(); // Reset timer on new connection
 
     // Send history to new client
     ws.send(JSON.stringify({ type: 'history', data: messageHistory }));
@@ -343,6 +520,9 @@ export async function startServer(options = {}) {
     if (featureName) {
       ws.send(JSON.stringify({ type: 'feature', data: featureName }));
     }
+
+    // Send current remaining time
+    ws.send(JSON.stringify({ type: 'timer_reset', data: getRemainingTime() }));
 
     ws.on('close', () => {
       clients.delete(ws);
@@ -397,6 +577,35 @@ export async function startServer(options = {}) {
       return;
     }
 
+    // API: Shutdown server
+    if (req.url === '/api/shutdown' && req.method === 'POST') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, message: 'Shutting down...' }));
+      setTimeout(() => shutdown('user-requested'), 100);
+      return;
+    }
+
+    // API: Get server status (including remaining idle time)
+    if (req.url === '/api/status' && req.method === 'GET') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        uptime: Math.floor((Date.now() - (lastActivityTime - idleTimeout + getRemainingTime() * 1000)) / 1000),
+        idleTimeoutSeconds: idleTimeout / 1000,
+        remainingSeconds: getRemainingTime(),
+        connectedClients: clients.size,
+        messageCount: messageHistory.length
+      }));
+      return;
+    }
+
+    // API: Reset idle timer (keep alive)
+    if (req.url === '/api/keepalive' && req.method === 'POST') {
+      updateActivity();
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, remainingSeconds: getRemainingTime() }));
+      return;
+    }
+
     // Serve main HTML for root
     if (req.url === '/' && req.method === 'GET') {
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
@@ -425,6 +634,18 @@ export async function startServer(options = {}) {
     httpServer.listen(port, async () => {
       const url = `http://localhost:${port}`;
       console.log(`🏢 SPC Chat UI running at ${url}`);
+      console.log(`⏱️  Auto-shutdown after ${idleTimeout / 60000} minutes of inactivity`);
+
+      // Start idle timeout checker
+      idleCheckInterval = setInterval(() => {
+        const remaining = getRemainingTime();
+        if (remaining <= 0) {
+          shutdown('idle-timeout');
+        } else if (remaining <= 60) {
+          // Warn clients when less than 1 minute remaining
+          broadcast({ type: 'timer_warning', data: remaining });
+        }
+      }, 1000);
 
       if (autoOpen) {
         await open(url);
@@ -436,7 +657,13 @@ export async function startServer(options = {}) {
         addMessage,
         broadcast,
         parseMessage,
+        updateActivity,
+        getRemainingTime,
+        shutdown,
         close: () => {
+          if (idleCheckInterval) {
+            clearInterval(idleCheckInterval);
+          }
           httpServer.close();
           wss.close();
         }
@@ -451,6 +678,13 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const port = args.find(a => a.startsWith('--port='))?.split('=')[1] || 3847;
   const noOpen = args.includes('--no-open');
   const feature = args.find(a => a.startsWith('--feature='))?.split('=')[1] || '';
+  const idleTimeoutArg = args.find(a => a.startsWith('--timeout='))?.split('=')[1];
+  const idleTimeout = idleTimeoutArg ? parseInt(idleTimeoutArg) : 30; // Default 30 minutes
 
-  startServer({ port: parseInt(port), autoOpen: !noOpen, feature });
+  startServer({ port: parseInt(port), autoOpen: !noOpen, feature, idleTimeout });
+
+  // Handle SIGINT for graceful shutdown
+  process.on('SIGINT', () => {
+    shutdown('ctrl-c');
+  });
 }
