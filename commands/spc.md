@@ -270,8 +270,8 @@ Before starting Phase 3, initialize the conversation log:
 .spc/conversation/{feature}-log.md
 ```
 
-Agents will post updates every 2-3 minutes to this log.
-PM (you) will poll the log every 10 seconds and relay messages to the terminal.
+Agents will post updates every 15-30 seconds to this log.
+PM (you) will monitor using `TaskOutput` and `Read` tools (NOT Bash sleep/cat!) and relay messages to the terminal.
 
 ### Step 3.1: Call Jamie AND Morgan (PARALLEL)
 
@@ -326,13 +326,37 @@ Task(
 )
 ```
 
-### Step 3.2: Monitor Conversation Log
+### Step 3.2: Monitor Conversation Log (Clean Terminal)
 
-**While agents work, poll the conversation log every 10 seconds:**
-- Read `.spc/conversation/{feature}-log.md`
-- Output new messages to terminal
-- If question is for you (@Alex), respond and post to log
-- Check for completion markers
+**Use TaskOutput and Read tools for monitoring (NOT Bash sleep/cat!):**
+
+```python
+# Monitor using TaskOutput (silent - no verbose output!)
+while not all_complete:
+    # Check agent status silently
+    architect_status = TaskOutput(task_id=architect_task_id, block=false, timeout=1000)
+    designer_status = TaskOutput(task_id=designer_task_id, block=false, timeout=1000)
+
+    # Read conversation log using Read tool (silent!)
+    log = Read(".spc/conversation/{feature}-log.md")
+
+    # Output new party messages to terminal
+    for line in new_messages(log):
+        if is_party_message(line):
+            output(line)  # 📐 Jamie: message
+
+    # Respond to @Alex mentions
+    if "@Alex" in line:
+        respond_and_post_to_log()
+
+    # Check for completion markers using Glob (silent!)
+    markers = Glob(".spc/markers/*-complete.yaml")
+```
+
+**Why NOT use Bash?**
+- ❌ `Bash: sleep 15 && cat output.txt` → Shows verbose command in terminal
+- ✅ `TaskOutput(block: false)` → Silent status check
+- ✅ `Read` tool → Silent file read
 
 ### Step 3.3: Bridge to Development Team
 

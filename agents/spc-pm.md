@@ -41,14 +41,16 @@ Phase 4: QA + Documentation (PARALLEL)
 Phase 5: Verification & Wrap-up
 ```
 
-### Conversation Log Monitoring
+### Conversation Log Monitoring (Clean Terminal)
 
 During parallel phases, you MUST:
 1. Initialize conversation log at `.spc/conversation/{feature}-log.md`
-2. Poll for new messages every 10 seconds
+2. Monitor using **TaskOutput** and **Read** tools (NOT Bash sleep/cat!)
 3. Output agent dialogue to the user's terminal
 4. Respond to questions directed at you (@Alex)
 5. Continue until all parallel agents complete
+
+**IMPORTANT:** Never use `Bash: sleep && cat` for monitoring - use `TaskOutput(block: false)` and `Read` tool instead. This keeps the terminal clean.
 </execution_mode>
 
 <stream_chaining_mode>
@@ -634,38 +636,49 @@ Task(
 )
 ```
 
-**Step 2.4: Monitor Conversation Log**
+**Step 2.4: Monitor Agent Progress (Using TaskOutput)**
 
-While agents work, poll the conversation log and relay to terminal:
+**IMPORTANT:** Do NOT use Bash `sleep && cat` commands for monitoring!
+Use `TaskOutput` and `Read` tools instead - they don't show verbose output.
 
 ```python
-last_read_line = 0
-while not (architect_marker_exists AND designer_marker_exists):
-    # Read conversation log
+# After spawning agents with run_in_background: true, capture task IDs
+architect_task = Task(..., run_in_background: true)  # Returns task_id
+designer_task = Task(..., run_in_background: true)   # Returns task_id
+
+# Monitor using TaskOutput (non-blocking, no verbose output!)
+while not all_complete:
+    # Check agent status silently using TaskOutput
+    architect_status = TaskOutput(task_id: architect_task.id, block: false, timeout: 1000)
+    designer_status = TaskOutput(task_id: designer_task.id, block: false, timeout: 1000)
+
+    # Read conversation log silently using Read tool (NOT Bash cat!)
     log_content = Read(.spc/conversation/{feature}-log.md)
 
-    # Find new messages since last read
-    new_messages = extract_messages_after(log_content, last_read_line)
-    last_read_line = current_line_count
+    # Extract and output party mode messages
+    for line in log_content.new_lines:
+        if is_party_message(line):
+            output(line)  # Show: 📐 Jamie: message
 
-    # Output new messages to terminal
-    for message in new_messages:
-        output_to_user(format_agent_message(message))
+        # Respond to @Alex mentions
+        if "@Alex" in line:
+            respond_and_append_to_log()
 
-        # If question is for PM (@Alex), respond
-        if message.to == "Alex" and message.status == "question":
-            response = generate_pm_response(message)
-            append_to_conversation_log(response)
-            output_to_user(format_pm_response(response))
+    # Check completion via markers (using Glob, not Bash ls!)
+    markers = Glob(".spc/markers/*-complete.yaml")
 
-    # Check for completion markers
-    if file_exists(.spc/markers/architect-{feature}-complete.yaml):
-        output("📐 Jamie: Architecture complete!")
-    if file_exists(.spc/markers/designer-{feature}-complete.yaml):
-        output("🎨 Morgan: Design complete!")
-
-    sleep(10)  # Poll every 10 seconds
+    if architect_complete and designer_complete:
+        break
 ```
+
+### Why TaskOutput Instead of Bash?
+
+| Method | Terminal Output | User Experience |
+|--------|-----------------|-----------------|
+| `Bash: sleep 15 && cat ...` | Shows command | ❌ Noisy |
+| `TaskOutput(block: false)` | Silent | ✅ Clean |
+| `Read` tool | Silent | ✅ Clean |
+| `Glob` for markers | Silent | ✅ Clean |
 
 **Step 2.5: Bridge to Developer**
 
@@ -863,30 +876,47 @@ This hides tool invocations and shows ONLY agent conversations.
 
 After spawning background agents, enter the streaming loop:
 
+**CRITICAL: Use TaskOutput and Read tools, NOT Bash sleep/cat!**
+
 ```python
-# Party Mode Streaming Loop
-last_read_position = 0
-poll_interval = 5  # seconds (faster than verbose mode)
+# Party Mode Streaming Loop (Clean - No Bash!)
+
+# Store task IDs from background agents
+agent_tasks = {
+    "architect": architect_task_id,
+    "designer": designer_task_id
+}
 
 while not all_agents_complete:
-    # Read conversation log
-    log_content = Read(.spc/conversation/{feature}-log.md)
+    # Check agent progress using TaskOutput (silent!)
+    for name, task_id in agent_tasks.items():
+        status = TaskOutput(task_id=task_id, block=false, timeout=1000)
+        if status.done:
+            output(f"✅ {name} complete!")
 
-    # Extract new messages since last read
-    new_content = log_content[last_read_position:]
-    last_read_position = len(log_content)
+    # Read conversation log using Read tool (silent!)
+    log_content = Read(".spc/conversation/{feature}-log.md")
 
     # Parse and output short-form messages only
-    for line in new_content.split('\n'):
+    for line in log_content.new_lines:
         if is_party_mode_message(line):
             # Format: 📐 Jamie: message
-            print(line)
+            output(line)
 
-    # Check for completion markers
-    check_markers()
+    # Check for completion markers using Glob (silent!)
+    markers = Glob(".spc/markers/*-complete.yaml")
 
-    sleep(poll_interval)
+    # NO explicit sleep - the tool calls provide natural pacing
 ```
+
+### Tools to Use (Clean Terminal)
+
+| Task | Tool | NOT This |
+|------|------|----------|
+| Check agent status | `TaskOutput(block: false)` | ~~`Bash: sleep && cat output`~~ |
+| Read conversation log | `Read` tool | ~~`Bash: cat log.md`~~ |
+| Check markers | `Glob` tool | ~~`Bash: ls -la markers/`~~ |
+| Wait for completion | `TaskOutput(block: true)` | ~~`Bash: sleep 10`~~ |
 
 ### Party Mode Message Detection
 
