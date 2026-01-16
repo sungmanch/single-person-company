@@ -81,6 +81,34 @@ if [ "$BACKUP_NEEDED" = true ]; then
 fi
 
 # ============================================================
+# INSTALL WORKFLOWS & SCRIPTS (Stream Chaining)
+# ============================================================
+PLUGIN_DIR="$CLAUDE_DIR/plugins/spc-ai-team"
+mkdir -p "$PLUGIN_DIR/workflows"
+mkdir -p "$PLUGIN_DIR/scripts"
+
+echo -e "${BLUE}Installing Stream Chaining support...${NC}"
+
+# Copy workflows
+if [ -d "$SCRIPT_DIR/workflows" ]; then
+    cp "$SCRIPT_DIR"/workflows/*.json "$PLUGIN_DIR/workflows/" 2>/dev/null
+    WORKFLOWS_COUNT=$(ls -1 "$SCRIPT_DIR/workflows/"*.json 2>/dev/null | wc -l | tr -d ' ')
+    echo -e "  ${GREEN}✓${NC} Installed $WORKFLOWS_COUNT workflows"
+fi
+
+# Copy scripts
+if [ -d "$SCRIPT_DIR/scripts" ]; then
+    cp "$SCRIPT_DIR"/scripts/*.js "$PLUGIN_DIR/scripts/" 2>/dev/null
+    chmod +x "$PLUGIN_DIR/scripts/"*.js 2>/dev/null
+    SCRIPTS_COUNT=$(ls -1 "$SCRIPT_DIR/scripts/"*.js 2>/dev/null | wc -l | tr -d ' ')
+    echo -e "  ${GREEN}✓${NC} Installed $SCRIPTS_COUNT scripts"
+fi
+
+# Create symlink for easy access
+ln -sf "$PLUGIN_DIR/scripts/party-filter.js" "$CLAUDE_DIR/party-filter" 2>/dev/null
+echo -e "  ${GREEN}✓${NC} Created party-filter symlink"
+
+# ============================================================
 # COMPLETION MESSAGE
 # ============================================================
 echo ""
@@ -93,10 +121,14 @@ echo "    Commands: $COMMANDS_COUNT → ~/.claude/commands/"
 echo "    Agents:   $AGENTS_COUNT → ~/.claude/agents/"
 echo ""
 echo -e "${GREEN}Quick Start:${NC}"
-echo "  /spc \"your request\"        - Full AI team workflow"
-echo "  /spc-pm \"analyze this\"     - Invoke PM directly"
-echo "  /spc-architect \"design\"    - Invoke Architect directly"
-echo "  /spc-status                - Check project status"
+echo "  /spc \"your request\"        - Full AI team workflow (Party Mode)"
+echo "  /spc:pm \"analyze this\"     - Invoke PM directly"
+echo "  /spc:architect \"design\"    - Invoke Architect directly"
+echo "  /spc:status                - Check project status"
+echo ""
+echo -e "${CYAN}Stream Chaining (Real-time):${NC}"
+echo "  claude -p --output-format stream-json \"task\" | ~/.claude/party-filter"
+echo "  npx claude-flow stream-chain run \"PRD\" \"Architecture\" \"Design\""
 echo ""
 echo -e "${CYAN}Start a new Claude Code session to use the commands.${NC}"
 echo ""

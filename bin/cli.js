@@ -26,6 +26,9 @@ const CLAUDE_DIR = path.join(HOME, '.claude');
 const COMMANDS_DIR = path.join(CLAUDE_DIR, 'commands');
 const AGENTS_DIR = path.join(CLAUDE_DIR, 'agents');
 const PROTOCOLS_DIR = path.join(CLAUDE_DIR, 'plugins', 'spc', 'protocols');
+const PLUGIN_DIR = path.join(CLAUDE_DIR, 'plugins', 'spc-ai-team');
+const WORKFLOWS_DIR = path.join(PLUGIN_DIR, 'workflows');
+const SCRIPTS_DIR = path.join(PLUGIN_DIR, 'scripts');
 
 // Source directory (where npm installed the package)
 const PKG_DIR = path.join(__dirname, '..');
@@ -94,6 +97,8 @@ async function main() {
     ensureDir(COMMANDS_DIR);
     ensureDir(AGENTS_DIR);
     ensureDir(PROTOCOLS_DIR);
+    ensureDir(WORKFLOWS_DIR);
+    ensureDir(SCRIPTS_DIR);
 
     // Detect existing installation
     const sisyphusExists = detectSisyphus();
@@ -152,6 +157,49 @@ async function main() {
     }
     console.log(`  ${c('green', protocolCount)} protocols installed`);
 
+    // Install Stream Chaining support (workflows & scripts)
+    console.log(c('blue', 'Installing Stream Chaining support...'));
+
+    // Copy workflows
+    const workflowsSrc = path.join(PKG_DIR, 'workflows');
+    if (fs.existsSync(workflowsSrc)) {
+        const workflowFiles = fs.readdirSync(workflowsSrc).filter(f => f.endsWith('.json'));
+        let workflowCount = 0;
+        for (const file of workflowFiles) {
+            if (copyFile(path.join(workflowsSrc, file), path.join(WORKFLOWS_DIR, file))) {
+                workflowCount++;
+            }
+        }
+        console.log(`  ${c('green', workflowCount)} workflows installed`);
+    }
+
+    // Copy scripts
+    const scriptsSrc = path.join(PKG_DIR, 'scripts');
+    if (fs.existsSync(scriptsSrc)) {
+        const scriptFiles = fs.readdirSync(scriptsSrc).filter(f => f.endsWith('.js'));
+        let scriptCount = 0;
+        for (const file of scriptFiles) {
+            const destPath = path.join(SCRIPTS_DIR, file);
+            if (copyFile(path.join(scriptsSrc, file), destPath)) {
+                // Make executable
+                try { fs.chmodSync(destPath, '755'); } catch (e) {}
+                scriptCount++;
+            }
+        }
+        console.log(`  ${c('green', scriptCount)} scripts installed`);
+    }
+
+    // Create symlink for party-filter
+    const partyFilterSrc = path.join(SCRIPTS_DIR, 'party-filter.js');
+    const partyFilterLink = path.join(CLAUDE_DIR, 'party-filter');
+    try {
+        if (fs.existsSync(partyFilterLink)) fs.unlinkSync(partyFilterLink);
+        fs.symlinkSync(partyFilterSrc, partyFilterLink);
+        console.log(`  ${c('green', 'party-filter')} symlink created`);
+    } catch (e) {
+        // Symlink may fail on Windows, continue anyway
+    }
+
     // Done
     console.log('');
     console.log(c('green', '╔════════════════════════════════════════════════════════╗'));
@@ -163,13 +211,17 @@ async function main() {
     console.log(c('green', '╚════════════════════════════════════════════════════════╝'));
     console.log('');
     console.log(c('green', 'Quick Start:'));
-    console.log('  /spc "your request"        - Full AI team workflow');
+    console.log('  /spc "your request"        - Full AI team workflow (Party Mode)');
     console.log('  /spc:pm "analyze this"     - Invoke PM directly');
     console.log('  /spc:status                - Check project status');
     if (installMode === 'full') {
         console.log('  /sisyphus "your task"      - Multi-agent orchestration');
         console.log('  /ultrawork "your task"     - Maximum performance mode');
     }
+    console.log('');
+    console.log(c('cyan', 'Stream Chaining (Real-time):'));
+    console.log('  claude -p --output-format stream-json "task" | ~/.claude/party-filter');
+    console.log('  npx claude-flow stream-chain run "PRD" "Architecture" "Design"');
     console.log('');
     console.log(c('cyan', 'Note:') + ' Restart Claude Code for changes to take effect.');
     console.log('');
