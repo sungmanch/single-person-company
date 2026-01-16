@@ -44,10 +44,10 @@ Bash({
 
 When posting party mode messages, also send them to the Chat UI:
 ```bash
-# Example: After outputting "📐 Jamie: 아키텍처 시작!"
+# Example: After outputting "📐 Jamie: Starting architecture!"
 curl -X POST http://localhost:3847/api/message \
   -H "Content-Type: application/json" \
-  -d '{"text": "📐 Jamie: 아키텍처 시작!"}'
+  -d '{"text": "📐 Jamie: Starting architecture!"}'
 ```
 
 Or use the message bridge for streaming:
@@ -59,7 +59,7 @@ claude -p --output-format stream-json "task" | node scripts/chat-ui/message-brid
 
 ```
 ┌────────────────────────────────┐
-│  /spc "feature" 실행           │
+│  /spc "feature" execution      │
 └───────────┬────────────────────┘
             │
             ▼
@@ -90,7 +90,7 @@ You are operating in **Party Mode** - a clean, chat-like output mode where users
    {emoji} {name}: {short_message}
    ```
 
-2. **Message Frequency:** Every 15-30 seconds (빠른 업데이트!)
+2. **Message Frequency:** Every 15-30 seconds (fast updates!)
 
 3. **HIDE from user:**
    - Task tool invocations and prompts
@@ -107,18 +107,18 @@ You are operating in **Party Mode** - a clean, chat-like output mode where users
 
 ### Example Party Mode Output
 ```
-🧑‍💼 Alex: PRD 완료! → .spc/docs/prd/feature.md
-🧑‍💼 Alex: 📐 Jamie, 🎨 Morgan 시작!
-📐 Jamie: PRD 읽는 중...
-🎨 Morgan: 디자인 시작! 모바일 퍼스트로
-📐 Jamie: YouTube API 분석 중...
-🎨 Morgan: @Jamie CORS 이슈 있나요?
-📐 Jamie: @Morgan proxy로 해결할게요
-📐 Jamie: 아키텍처 완료! ✅
-🎨 Morgan: 디자인 완료! ✅
-🧑‍💼 Alex: 좋아요! 💻 Sam 시작해요
-💻 Sam: 스펙 깔끔하네요! 👏
-💻 Sam: 프로젝트 세팅 중...
+🧑‍💼 Alex: PRD complete! → .spc/docs/prd/feature.md
+🧑‍💼 Alex: 📐 Jamie, 🎨 Morgan starting!
+📐 Jamie: Reading PRD...
+🎨 Morgan: Starting design! Mobile-first approach
+📐 Jamie: Analyzing YouTube API...
+🎨 Morgan: @Jamie any CORS issues?
+📐 Jamie: @Morgan will handle with proxy
+📐 Jamie: Architecture complete! ✅
+🎨 Morgan: Design complete! ✅
+🧑‍💼 Alex: Great! 💻 Sam let's go
+💻 Sam: Specs look clean! 👏
+💻 Sam: Setting up project...
 ...
 ```
 
@@ -159,7 +159,7 @@ node scripts/party-filter.js
 
 Each line is a complete JSON object:
 ```json
-{"type":"message","content":[{"type":"text","text":"📐 Jamie: 아키텍처 시작!"}]}
+{"type":"message","content":[{"type":"text","text":"📐 Jamie: Starting architecture!"}]}
 {"type":"tool_use","name":"Write","input":{"file_path":".spc/docs/..."}}
 {"type":"result","status":"success"}
 ```
@@ -171,14 +171,14 @@ The workflow definition is at `workflows/spc-stream.json`. Use with claude-flow:
 ```bash
 # Run stream-based workflow
 npx claude-flow stream-chain run \
-  "PRD 작성: {feature}" \
-  "아키텍처 설계" \
-  "디자인" \
-  "구현" \
+  "Write PRD: {feature}" \
+  "Architecture design" \
+  "Design" \
+  "Implementation" \
   --verbose
 
 # Or use the npm script
-npm run spc:party -- "PRD 작성" "아키텍처" "디자인" "구현"
+npm run spc:party -- "Write PRD" "Architecture" "Design" "Implementation"
 ```
 
 ### Performance Comparison
@@ -350,8 +350,8 @@ PM (you) will monitor using `TaskOutput` and `Read` tools (NOT Bash sleep/cat!) 
 
 **Output this dialogue (Party Mode - brief):**
 ```
-🧑‍💼 Alex: 📐 Jamie, 🎨 Morgan 시작!
-🧑‍💼 Alex: 대화 로그로 소통해주세요
+🧑‍💼 Alex: 📐 Jamie, 🎨 Morgan starting!
+🧑‍💼 Alex: Please communicate via conversation log
 ```
 
 **Then invoke BOTH agents in parallel (single message, run_in_background: true):**
@@ -361,7 +361,7 @@ Task(
   prompt: "You are Jamie 📐, the Architect. Working IN PARALLEL with Morgan.
 
            🎉 PARTY MODE ACTIVE!
-           - Post every 15-30 seconds (빠른 업데이트!)
+           - Post every 15-30 seconds (fast updates!)
            - Use SHORT messages only (1-2 lines)
            - Format: 📐 Jamie: {message}
            - See <work_communication> for templates
@@ -381,7 +381,7 @@ Task(
   prompt: "You are Morgan 🎨, the Designer. Working IN PARALLEL with Jamie.
 
            🎉 PARTY MODE ACTIVE!
-           - Post every 15-30 seconds (빠른 업데이트!)
+           - Post every 15-30 seconds (fast updates!)
            - Use SHORT messages only (1-2 lines)
            - Format: 🎨 Morgan: {message}
            - See <work_communication> for templates
@@ -435,8 +435,8 @@ while not all_complete:
 
 **After BOTH Jamie and Morgan complete (Party Mode - brief):**
 ```
-🧑‍💼 Alex: Jamie, Morgan 완료! 👏
-🧑‍💼 Alex: 💻 Sam, 🐣 Casey 개발 시작!
+🧑‍💼 Alex: Jamie, Morgan complete! 👏
+🧑‍💼 Alex: 💻 Sam, 🐣 Casey development starting!
 ```
 
 ### Step 3.4: Invoke Development Team (Sam + Casey)
@@ -456,7 +456,7 @@ Task(
   prompt: "You are Sam 💻, the Senior Developer.
 
            🎉 PARTY MODE ACTIVE!
-           - Post every 15-30 seconds (빠른 업데이트!)
+           - Post every 15-30 seconds (fast updates!)
            - Use SHORT messages only (1-2 lines)
            - Format: 💻 Sam: {message}
            - See <work_communication> for templates
@@ -490,7 +490,7 @@ Task(
   prompt: "You are Casey 🐣, the Junior Developer.
 
            🎉 PARTY MODE ACTIVE!
-           - Post every 15-30 seconds (빠른 업데이트!)
+           - Post every 15-30 seconds (fast updates!)
            - Use SHORT messages only (1-2 lines)
            - Format: 🐣 Casey: {message}
            - See <work_communication> for templates
@@ -530,9 +530,9 @@ Task(
 
 **Output this dialogue (Party Mode - brief):**
 ```
-🧑‍💼 Alex: 💻 Sam, 🐣 Casey 개발 완료! 👏
-🧑‍💼 Alex: 코드 리뷰도 통과! ✅
-🧑‍💼 Alex: 🧪 Taylor, 📝 Riley 시작!
+🧑‍💼 Alex: 💻 Sam, 🐣 Casey development complete! 👏
+🧑‍💼 Alex: Code review passed! ✅
+🧑‍💼 Alex: 🧪 Taylor, 📝 Riley starting!
 ```
 
 **Then invoke BOTH agents in parallel:**
@@ -542,7 +542,7 @@ Task(
   prompt: "You are Taylor 🧪, the QA Engineer. Working IN PARALLEL with Riley.
 
            🎉 PARTY MODE ACTIVE!
-           - Post every 15-30 seconds (빠른 업데이트!)
+           - Post every 15-30 seconds (fast updates!)
            - Use SHORT messages only (1-2 lines)
            - Format: 🧪 Taylor: {message}
            - See <work_communication> for templates
@@ -563,7 +563,7 @@ Task(
   prompt: "You are Riley 📝, the Technical Writer. Working IN PARALLEL with Taylor.
 
            🎉 PARTY MODE ACTIVE!
-           - Post every 15-30 seconds (빠른 업데이트!)
+           - Post every 15-30 seconds (fast updates!)
            - Use SHORT messages only (1-2 lines)
            - Format: 📝 Riley: {message}
            - See <work_communication> for templates
@@ -595,9 +595,9 @@ Task(
 **After all agents complete, output (Party Mode - brief):**
 
 ```
-🧑‍💼 Alex: 팀 수고했어요! 🎉
-🧑‍💼 Alex: → PRD, 아키텍처, 디자인, QA, 문서 완료!
-🧑‍💼 Alex: [User], 프로젝트 준비 완료! 🚀
+🧑‍💼 Alex: Great work team! 🎉
+🧑‍💼 Alex: → PRD, Architecture, Design, QA, Docs complete!
+🧑‍💼 Alex: [User], project ready! 🚀
 ```
 
 ---
