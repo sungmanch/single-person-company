@@ -1,0 +1,135 @@
+{
+  "name": "spc-party-workflow",
+  "description": "SPC Team with Stream Chaining - Real-time agent collaboration",
+  "version": "1.0.0",
+  "config": {
+    "outputFormat": "stream-json",
+    "inputFormat": "stream-json",
+    "partyMode": true,
+    "polling": false
+  },
+  "agents": {
+    "pm": {
+      "name": "Alex",
+      "emoji": "🧑‍💼",
+      "role": "Product Manager",
+      "subagent": "spc-pm"
+    },
+    "architect": {
+      "name": "Jamie",
+      "emoji": "📐",
+      "role": "Architect",
+      "subagent": "spc-architect"
+    },
+    "designer": {
+      "name": "Morgan",
+      "emoji": "🎨",
+      "role": "Designer",
+      "subagent": "spc-designer"
+    },
+    "developer": {
+      "name": "Sam",
+      "emoji": "💻",
+      "role": "Developer",
+      "subagent": "spc-developer"
+    },
+    "qa": {
+      "name": "Taylor",
+      "emoji": "🧪",
+      "role": "QA Engineer",
+      "subagent": "spc-qa"
+    },
+    "writer": {
+      "name": "Riley",
+      "emoji": "📝",
+      "role": "Technical Writer",
+      "subagent": "spc-writer"
+    }
+  },
+  "tasks": [
+    {
+      "id": "prd",
+      "assignTo": "pm",
+      "prompt": "Create PRD for the requested feature. Output to .spc/docs/prd/{feature}.md. Use short party mode messages.",
+      "outputs": [".spc/docs/prd/{feature}.md"],
+      "marker": ".spc/markers/pm-{feature}-complete.yaml"
+    },
+    {
+      "id": "architecture",
+      "assignTo": "architect",
+      "prompt": "Design architecture based on PRD stream. Coordinate with Morgan via stream. Output to .spc/docs/architecture/{feature}.md",
+      "depends": ["prd"],
+      "parallel": true,
+      "outputs": [".spc/docs/architecture/{feature}.md"],
+      "marker": ".spc/markers/architect-{feature}-complete.yaml"
+    },
+    {
+      "id": "design",
+      "assignTo": "designer",
+      "prompt": "Create UI/UX design based on PRD stream. Coordinate with Jamie via stream. Output to .spc/docs/design/{feature}.md",
+      "depends": ["prd"],
+      "parallel": true,
+      "outputs": [
+        ".spc/docs/design/{feature}.md",
+        ".spc/userflows/{feature}-flow.md"
+      ],
+      "marker": ".spc/markers/designer-{feature}-complete.yaml"
+    },
+    {
+      "id": "implementation",
+      "assignTo": "developer",
+      "prompt": "Implement feature based on architecture and design streams. Post progress updates.",
+      "depends": ["architecture", "design"],
+      "parallel": false,
+      "marker": ".spc/markers/developer-{feature}-complete.yaml"
+    },
+    {
+      "id": "qa",
+      "assignTo": "qa",
+      "prompt": "Test implementation. Coordinate with Riley for documentation. Report bugs via stream.",
+      "depends": ["implementation"],
+      "parallel": true,
+      "outputs": [".spc/qa-reports/{feature}.md"],
+      "marker": ".spc/markers/qa-{feature}-complete.yaml"
+    },
+    {
+      "id": "docs",
+      "assignTo": "writer",
+      "prompt": "Write documentation. Coordinate with Taylor for known issues. Update README.md",
+      "depends": ["implementation"],
+      "parallel": true,
+      "outputs": ["README.md"],
+      "marker": ".spc/markers/writer-{feature}-complete.yaml"
+    }
+  ],
+  "phases": [
+    {
+      "name": "Planning",
+      "tasks": ["prd"],
+      "description": "PM creates PRD from user request"
+    },
+    {
+      "name": "Design",
+      "tasks": ["architecture", "design"],
+      "parallel": true,
+      "description": "Architect and Designer work in parallel"
+    },
+    {
+      "name": "Implementation",
+      "tasks": ["implementation"],
+      "description": "Developer implements the feature"
+    },
+    {
+      "name": "Validation",
+      "tasks": ["qa", "docs"],
+      "parallel": true,
+      "description": "QA and Writer work in parallel"
+    }
+  ],
+  "streamChaining": {
+    "enabled": true,
+    "filterScript": "scripts/party-filter.js",
+    "messageFormat": "{emoji} {name}: {message}",
+    "frequency": "15-30s"
+  }
+}
