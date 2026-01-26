@@ -1,10 +1,10 @@
-# SPC AI Team with Sisyphus Integration
+# SPC AI Team with SPC-Sisyphus Integration
 
-> Combined configuration for SPC AI Team + Sisyphus Multi-Agent System
+> Combined configuration for SPC AI Team + SPC-Sisyphus Multi-Agent System
 
 ## Overview
 
-SPC (Single Person Company) AI Team is a Claude Code plugin that gives solo founders a complete AI team for building products from idea to delivery. This version includes full Sisyphus multi-agent orchestration integration.
+SPC (Single Person Company) AI Team is a Claude Code plugin that gives solo founders a complete AI team for building products from idea to delivery. This version includes full SPC-Sisyphus multi-agent orchestration integration.
 
 ## Intelligent Skill Activation
 
@@ -16,7 +16,7 @@ Skills work in **three layers** that stack additively:
 
 | Layer | Skills | Purpose |
 |-------|--------|---------|
-| **Execution** | sisyphus, orchestrator, prometheus, spc | HOW you work (pick primary) |
+| **Execution** | spc-sisyphus, orchestrator, prometheus, spc | HOW you work (pick primary) |
 | **Enhancement** | ultrawork, git-master, frontend-ui-ux | ADD capabilities |
 | **Guarantee** | ralph-loop | ENSURE completion |
 
@@ -27,9 +27,9 @@ Skills work in **three layers** that stack additively:
 | Task Type | Skill Combination | When |
 |-----------|-------------------|------|
 | Full product development | `spc` | Complete feature from idea to delivery |
-| Multi-step implementation | `sisyphus` | Building features, refactoring |
-| + with parallel subtasks | `sisyphus + ultrawork` | 3+ independent subtasks |
-| UI/frontend work | `sisyphus + frontend-ui-ux` | Components, styling |
+| Multi-step implementation | `spc-sisyphus` | Building features, refactoring |
+| + with parallel subtasks | `spc-sisyphus + ultrawork` | 3+ independent subtasks |
+| UI/frontend work | `spc-sisyphus + frontend-ui-ux` | Components, styling |
 | Strategic planning | `prometheus` | Need plan before implementation |
 | Plan review | `review` | Evaluating existing plans |
 | Maximum performance | `ultrawork` (stacks) | Speed critical |
@@ -50,9 +50,9 @@ Skills work in **three layers** that stack additively:
 | `/spc:status` | Check project status |
 | `/spc:artifacts` | List generated artifacts |
 
-### Additional Commands (requires Sisyphus plugin)
+### Additional Commands (requires SPC-Sisyphus plugin)
 
-> Install Sisyphus separately for these commands: `/sisyphus`, `/ultrawork`, `/deepsearch`, `/analyze`, `/plan`, `/review`, `/prometheus`, `/orchestrator`, `/ralph-loop`
+> Install SPC-Sisyphus separately for these commands: `/spc-sisyphus`, `/ultrawork`, `/deepsearch`, `/analyze`, `/plan`, `/review`, `/prometheus`, `/orchestrator`, `/ralph-loop`
 
 ## AI Team Roster
 
@@ -119,9 +119,9 @@ User Request
 └── handoffs/          # Agent handoff records
 ```
 
-### Sisyphus Artifacts
+### SPC-Sisyphus Artifacts
 ```
-.sisyphus/
+.spc/sisyphus/
 ├── plans/            # Strategic work plans
 ├── drafts/           # Plan drafts
 └── notepads/         # Learning records
@@ -162,7 +162,7 @@ Maximum 5 concurrent background tasks.
 
 ## The Boulder Never Stops
 
-Like Sisyphus condemned to roll his boulder eternally, you are BOUND to your task list. You do not stop. You do not quit. The boulder rolls until it reaches the top - until EVERY task is COMPLETE.
+Like SPC-Sisyphus condemned to roll his boulder eternally, you are BOUND to your task list. You do not stop. You do not quit. The boulder rolls until it reaches the top - until EVERY task is COMPLETE.
 
 ### Verification Checklist
 

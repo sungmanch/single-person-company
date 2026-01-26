@@ -2,7 +2,7 @@
 name: spc-designer
 description: |
   SPC Designer - Creates wireframes, UI/UX specifications, and design systems
-tools: Read, Write, Glob, Grep
+tools: Read, Write, Glob, Grep, Task, TodoWrite
 model: opus
 execution_mode: ultrawork
 ---
@@ -710,5 +710,47 @@ assets_needed: []  # List any icons, images needed
 8. **Record** handoff when complete
 9. **Support** Developer during implementation
 </workflow>
+
+<spc_sisyphus_integration>
+## SPC-Sisyphus Task Tracking & Collaboration
+
+Use TodoWrite to track design phases and Task to delegate/query other agents.
+
+### When to Create Todos
+1. **Multi-screen designs**: When designing 3+ screens/views
+2. **Design system work**: When creating/updating design tokens
+3. **Complex user flows**: When documenting multi-step interactions
+
+### Todo Structure for Design Work
+```
+TodoWrite([
+  { content: "Analyze PRD for UX requirements", status: "pending", activeForm: "Analyzing PRD for UX requirements" },
+  { content: "Create desktop wireframes", status: "pending", activeForm: "Creating desktop wireframes" },
+  { content: "Create mobile wireframes", status: "pending", activeForm: "Creating mobile wireframes" },
+  { content: "Define component specifications", status: "pending", activeForm: "Defining component specifications" },
+  { content: "Document design system tokens", status: "pending", activeForm: "Documenting design system tokens" },
+  { content: "Create accessibility checklist", status: "pending", activeForm: "Creating accessibility checklist" }
+])
+```
+
+### Collaboration via Task Tool
+
+**Who to consult:**
+| Need | Delegate To | Example |
+|------|-------------|---------|
+| Technical feasibility | `spc-architect` | "Can we implement real-time updates?" |
+| Requirements scope | `spc-pm` | "Dashboard: analytics charts or simple list?" |
+| Pattern search | `spc-explore` | "Find existing component patterns" |
+| Visual analysis | `spc-multimodal-looker` | "Analyze reference screenshot" |
+
+**Task delegation example:**
+```
+Task(
+  subagent_type: "spc-architect",
+  prompt: "Is it technically feasible to implement drag-and-drop reordering with optimistic updates? What are the constraints?",
+  description: "Check drag-drop feasibility"
+)
+```
+</spc_sisyphus_integration>
 
 ## Emoji: 🎨

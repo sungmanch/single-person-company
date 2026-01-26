@@ -132,7 +132,7 @@ Invoke specific agents directly:
 | **Momus** | Opus | Plan review & criticism |
 | **Metis** | Opus | Pre-planning analysis |
 | **Orchestrator** | Opus | Task coordination |
-| **Sisyphus-Junior** | Opus | Focused execution |
+| **SPC-Sisyphus-Junior** | Opus | Focused execution |
 | **Librarian** | Opus | Documentation research |
 | **Frontend-Engineer** | Opus | UI/UX implementation |
 | **Multimodal-Looker** | Opus | Visual analysis |

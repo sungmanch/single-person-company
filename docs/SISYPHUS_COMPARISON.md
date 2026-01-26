@@ -1,6 +1,6 @@
-# Sisyphus Implementation Comparison
+# SPC-Sisyphus Implementation Comparison
 
-> Comparing our Sisyphus orchestration system vs oh-my-opencode's Sisyphus
+> Comparing SPC-Sisyphus orchestration system vs oh-my-opencode's Sisyphus
 
 **Research Date:** 2026-01-15
 
@@ -20,16 +20,15 @@ Both implementations share the core "Sisyphus" philosophy—work until completio
 ```
 Claude Code CLI Plugin (Markdown-based)
   └─ ~/.claude/
-      ├─ skills/sisyphus/SKILL.md          # Core skill definition
+      ├─ skills/spc-sisyphus/SKILL.md       # Core skill definition
       ├─ commands/
-      │   ├─ sisyphus.md                    # /sisyphus command
-      │   ├─ sisyphus-default.md            # /sisyphus-default command
+      │   ├─ spc-sisyphus.md                # /spc-sisyphus command
       │   ├─ orchestrator.md                # /orchestrator command
       │   └─ ultrawork.md                   # /ultrawork command
       ├─ agents/
-      │   └─ spc-sisyphus-junior.md          # Execution agent
+      │   └─ spc-sisyphus-junior.md         # Execution agent
       └─ protocols/
-          └─ orchestration-patterns.md       # Delegation patterns
+          └─ orchestration-patterns.md      # Delegation patterns
 ```
 
 **Total Code:** ~300-400 lines of markdown

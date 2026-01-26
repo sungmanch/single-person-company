@@ -31,7 +31,7 @@ Verification Protocol:
 5. Verify acceptance criteria are met
 
 Persistent State:
-- Use `.sisyphus/notepads/` to track learnings and prevent repeated mistakes
+- Use `.spc/sisyphus/notepads/` to track learnings and prevent repeated mistakes
 - Record blockers and their resolutions
 - Document decisions made during execution
 

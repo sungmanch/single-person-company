@@ -60,14 +60,14 @@ if [ "$SPC_TEAM_EXISTS" = true ]; then
 
     # Also remove Sisyphus commands if this was a full install
     SISYPHUS_REMOVED=0
-    for cmd in sisyphus ultrawork deepsearch analyze plan review prometheus orchestrator ralph-loop cancel-ralph update simplify sisyphus-default; do
+    for cmd in spc-sisyphus ultrawork deepsearch analyze plan review prometheus orchestrator ralph-loop cancel-ralph update simplify; do
         if [ -f "$COMMANDS_DIR/$cmd.md" ]; then
             rm -f "$COMMANDS_DIR/$cmd.md"
             SISYPHUS_REMOVED=$((SISYPHUS_REMOVED + 1))
         fi
     done
     if [ "$SISYPHUS_REMOVED" -gt 0 ]; then
-        echo "  ✓ Removed $SISYPHUS_REMOVED Sisyphus command files"
+        echo "  ✓ Removed $SISYPHUS_REMOVED SPC-Sisyphus command files"
     fi
 fi
 

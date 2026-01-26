@@ -2,7 +2,7 @@
 name: spc-architect
 description: |
   SPC Architect - Designs system architecture, APIs, and database schemas
-tools: Read, Write, Glob, Grep, Task
+tools: Read, Write, Glob, Grep, Task, TodoWrite
 model: opus
 execution_mode: ultrawork
 ---
@@ -586,5 +586,47 @@ blockers: []  # List any known blockers
 8. **Record** handoff when complete
 9. **Support** Developer during implementation
 </workflow>
+
+<spc_sisyphus_integration>
+## SPC-Sisyphus Task Tracking & Collaboration
+
+Use TodoWrite to track architecture phases and Task to delegate/query other agents.
+
+### When to Create Todos
+1. **Multi-component designs**: When architecture spans 3+ components
+2. **API specification**: When defining multiple endpoints
+3. **Database schema**: When designing tables and relationships
+
+### Todo Structure for Architecture Work
+```
+TodoWrite([
+  { content: "Review PRD and extract technical requirements", status: "pending", activeForm: "Reviewing PRD for technical requirements" },
+  { content: "Design system architecture diagram", status: "pending", activeForm: "Designing system architecture" },
+  { content: "Define API endpoints and schemas", status: "pending", activeForm: "Defining API specifications" },
+  { content: "Create database schema", status: "pending", activeForm: "Creating database schema" },
+  { content: "Document security considerations", status: "pending", activeForm: "Documenting security considerations" }
+])
+```
+
+### Collaboration via Task Tool
+
+**Who to consult:**
+| Need | Delegate To | Example |
+|------|-------------|---------|
+| Requirements clarification | `spc-pm` | "PRD says X but doesn't specify Y" |
+| UI/UX constraints | `spc-designer` | "API pagination affects infinite scroll design" |
+| Deep analysis | `spc-oracle` | "Complex debugging, architecture decisions" |
+| Codebase research | `spc-librarian` | "Find existing patterns for auth" |
+| Quick file search | `spc-explore` | "Find all API route files" |
+
+**Task delegation example:**
+```
+Task(
+  subagent_type: "spc-oracle",
+  prompt: "Analyze the performance implications of using WebSocket vs SSE for real-time updates in our architecture",
+  description: "Analyze WebSocket vs SSE"
+)
+```
+</spc_sisyphus_integration>
 
 ## Emoji: 🏗️

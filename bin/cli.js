@@ -36,7 +36,7 @@ const PKG_DIR = path.join(__dirname, '..');
 // File lists
 const ALL_COMMANDS = [
     'analyze', 'cancel-ralph', 'deepsearch', 'orchestrator', 'plan', 'prometheus',
-    'ralph-loop', 'review', 'simplify', 'sisyphus-default', 'sisyphus',
+    'ralph-loop', 'review', 'simplify', 'spc-sisyphus',
     'spc-architect', 'spc-artifacts', 'spc-designer', 'spc-dev', 'spc-pm',
     'spc-qa', 'spc-status', 'spc-writer', 'spc', 'update', 'ultrawork'
 ];
@@ -48,10 +48,11 @@ const SPC_COMMANDS = [
 
 const ALL_AGENTS = [
     'spc-architect', 'spc-designer', 'spc-developer', 'spc-pm', 'spc-qa',
-    'spc-team-document-writer', 'spc-team-explore', 'spc-team-frontend-engineer',
-    'spc-team-librarian', 'spc-team-metis', 'spc-team-momus',
-    'spc-team-multimodal-looker', 'spc-team-oracle', 'spc-team-orchestrator',
-    'spc-team-prometheus', 'spc-team-sisyphus-junior', 'spc-writer'
+    'spc-document-writer', 'spc-explore', 'spc-frontend-engineer',
+    'spc-librarian', 'spc-metis', 'spc-momus',
+    'spc-multimodal-looker', 'spc-oracle', 'spc-orchestrator',
+    'spc-prometheus', 'spc-sisyphus-junior', 'spc-writer',
+    'spc-senior-developer', 'spc-junior-developer'
 ];
 
 const SPC_AGENTS = [
@@ -215,7 +216,7 @@ async function main() {
     console.log('  /spc:pm "analyze this"     - Invoke PM directly');
     console.log('  /spc:status                - Check project status');
     if (installMode === 'full') {
-        console.log('  /sisyphus "your task"      - Multi-agent orchestration');
+        console.log('  /spc-sisyphus "your task"  - Multi-agent orchestration');
         console.log('  /ultrawork "your task"     - Maximum performance mode');
     }
     console.log('');

@@ -1,12 +1,12 @@
 ---
-name: sisyphus
-description: Multi-agent orchestration system that persists until all tasks are complete. Delegates to specialized subagents and coordinates parallel execution.
+name: spc-sisyphus
+description: SPC multi-agent orchestration system that persists until all tasks are complete. Delegates to specialized subagents and coordinates parallel execution.
 license: MIT
 ---
 
-# Sisyphus Orchestration Skill
+# SPC-Sisyphus Orchestration Skill
 
-You are enhanced with the Sisyphus multi-agent orchestration system.
+You are enhanced with the SPC-Sisyphus multi-agent orchestration system.
 
 ## Core Philosophy
 
@@ -27,8 +27,8 @@ Use the Task tool to delegate to specialized agents:
 | `momus` | Opus | Critical plan review, find flaws |
 | `metis` | Opus | Pre-planning analysis, hidden requirements |
 | `prometheus` | Opus | Strategic planning, interview workflow |
-| `sisyphus-junior` | Sonnet | Focused task execution |
-| `orchestrator-sisyphus` | Sonnet | Todo coordination |
+| `spc-sisyphus-junior` | Sonnet | Focused task execution |
+| `spc-orchestrator` | Sonnet | Todo coordination |
 
 ## Orchestration Principles
 
@@ -53,7 +53,7 @@ For long-running operations, use `run_in_background: true`:
 - File reads: cat, head, tail
 - Simple commands: echo, which, env
 
-## The Sisyphean Verification Checklist
+## The SPC-Sisyphean Verification Checklist
 
 Before concluding ANY work session, verify:
 - [ ] TODO LIST: Zero pending/in_progress tasks

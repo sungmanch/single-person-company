@@ -1,7 +1,7 @@
 {
   "name": "spc-ai-team",
   "version": "1.0.0",
-  "description": "SPC (Single Person Company) AI Team - Multi-agent orchestration system with specialized agents for PM, Architect, Designer, Developer, QA, and Technical Writer roles. Includes Sisyphus workflow automation.",
+  "description": "SPC (Single Person Company) AI Team - Multi-agent orchestration system with specialized agents for PM, Architect, Designer, Developer, QA, and Technical Writer roles. Includes SPC-Sisyphus workflow automation.",
   "author": {
     "name": "Sungman Cho",
     "email": "sungman@example.com"
@@ -14,7 +14,7 @@
     "ai-team",
     "multi-agent",
     "orchestration",
-    "sisyphus",
+    "spc-sisyphus",
     "automation",
     "productivity"
   ]
